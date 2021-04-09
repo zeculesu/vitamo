@@ -12,8 +12,8 @@ class Message(SQLAlchemyBase):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     text = Column(String, nullable=True)
     sender = Column(Integer, ForeignKey('users.id'))
-    attachments = relation('Attachment', back_populates='message')
-    viewable_for = relation('User', back_populates='message')
+    attachments = relation('Attachment')
+    # viewable_for = relation('User', back_populates='message')
     sent_time = Column(DateTime, default=datetime.now)
 
 
