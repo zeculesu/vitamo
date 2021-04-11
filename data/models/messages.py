@@ -1,6 +1,5 @@
 from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relation
 
 from ..db_session import SQLAlchemyBase
@@ -14,6 +13,7 @@ class Message(SQLAlchemyBase):
     sender = Column(Integer, ForeignKey('users.id'))
     attachments = relation('Attachment')
     # viewable_for = relation('User', back_populates='message')
+    is_read = Column(Boolean, default=False)
     sent_time = Column(DateTime, default=datetime.now)
 
 

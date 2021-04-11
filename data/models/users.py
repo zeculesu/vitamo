@@ -1,4 +1,6 @@
+import os.path
 from datetime import datetime
+from flask import url_for
 
 from sqlalchemy import Column, String, Integer, DateTime, Table, ForeignKey
 from sqlalchemy.orm import relation
@@ -11,6 +13,10 @@ chat_to_user = Table('chat_to_user', SQLAlchemyBase.metadata,
                      Column('chat', Integer, ForeignKey('chats.id')),
                      Column('users', Integer, ForeignKey('users.id')))
 
+user_to_user = Table('user_to_user', SQLAlchemyBase.metadata,
+                     Column('user1', Integer, ForeignKey('users.id')),
+                     Column('user2', Integer, ForeignKey('users.id')))
+
 
 class User(SQLAlchemyBase, SerializerMixin):
     __tablename__ = 'users'
@@ -19,6 +25,9 @@ class User(SQLAlchemyBase, SerializerMixin):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     username = Column(String)
+    description = Column(String, nullable=True)
+    logo = Column(Integer, ForeignKey('attachments.id'), nullable=True)
+    # contacts = relation('User', secondary='user_to_user', backref='users')
     chats = relation('Chat', secondary='chat_to_user', backref='users')
     created_date = Column(DateTime, default=datetime.now)
 

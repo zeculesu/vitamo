@@ -1,23 +1,17 @@
 import os.path
 
+from flask import Flask
+from flask_restful import Api
+
 from data import db_session
-from data.models.chats import Chat
-from data.models.users import User
+from data.api.user_resource import UserResource, UserPublicListResource
 
-
-def main():
-    session = db_session.create_session()
-    user_zeculesu = session.query(User).filter(User.email == 'zeculesu@yandex.ru').first()
-    user_elilcat = session.query(User).filter(User.email == 'elilcatness@gmail.com').first()
-    chat = session.query(Chat).first()
-    chat.users.append(user_zeculesu)
-    print(f'Chat: {chat.title}')
-    print(f'user_zeculesu.chats: {[ch.to_dict(only=("id", "title")) for ch in user_zeculesu.chats]}')
-    print(f'chat.users: {[user.to_dict(only=("id", "username")) for user in chat.users]}')
-    session.merge(chat)
-    session.commit()
-
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+api = Api(app)
+api.add_resource(UserResource, '/api/users/<int:user_id>')
+api.add_resource(UserPublicListResource, '/api/users')
 
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
-    main()
+    app.run()
