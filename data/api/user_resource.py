@@ -14,12 +14,10 @@ def handle_user_id(user_id, session):
 
 
 class UserResource(Resource):
-    user_fields = ('id', 'username', 'description', 'logo', 'email', 'chats', 'created_date')
-
     def get(self, user_id):
         session = db_session.create_session()
         user = handle_user_id(user_id, session)
-        return jsonify({'user': user.to_dict(only=self.user_fields)})
+        return jsonify({'user': user.to_dict(only=User.serialize_fields, users_in_chats=False)})
 
     def put(self, user_id):
         session = db_session.create_session()
@@ -27,8 +25,7 @@ class UserResource(Resource):
         args = user_put_parser.parse_args()
         if args.get('password') is not None:
             user.set_password(args.pop('password'))
-        for key, val in filter(lambda x: x[0] in self.user_fields and x[1] is not None,
-                               args.items()):
+        for key, val in filter(lambda x: x[1] is not None, args.items()):
             setattr(user, key, val)
         session.merge(user)
         session.commit()
@@ -40,6 +37,7 @@ class UserResource(Resource):
         user = handle_user_id(user_id, session)
         session.delete(user)
         session.commit()
+        return jsonify({'message': 'OK'})
 
 
 class UserPublicListResource(Resource):
@@ -48,7 +46,8 @@ class UserPublicListResource(Resource):
 
     def get(self):
         session = db_session.create_session()
-        users = [user.to_dict(only=self.user_fields) for user in session.query(User).all()]
+        users = [user.to_dict(only=self.user_fields, users_in_chats=False)
+                 for user in session.query(User).all()]
         return jsonify({'users': users})
 
     @staticmethod
@@ -62,3 +61,4 @@ class UserPublicListResource(Resource):
         user.set_password(password)
         session.add(user)
         session.commit()
+        return jsonify({'message': 'OK'})
