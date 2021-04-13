@@ -4,8 +4,8 @@ from flask import Flask
 from flask_restful import Api
 
 from data import db_session
-from data.api.user_resource import UserResource, UserPublicListResource
-from data.api.chat_resource import ChatResource, ChatPublicListResource
+from data.api.resources.user_resource import UserResource, UserPublicListResource
+from data.api.resources.chat_resource import ChatResource, ChatPublicListResource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')

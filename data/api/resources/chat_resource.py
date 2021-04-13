@@ -1,18 +1,14 @@
 from flask import jsonify
 from flask_restful import Resource, abort
 
-from .parser import *
-from .. import db_session
-from ..models.chats import Chat
+from ... import db_session
+from ...models.chats import Chat
 from .user_resource import handle_user_id
-from ..models.users import User
 
+from ..parsers.base import MethodParser
+from ..parsers.chats import *
 
-def handle_chat_id(chat_id, session):
-    chat = session.query(Chat).get(chat_id)
-    if not chat:
-        abort(404, message=f'Chat {chat_id} not found')
-    return chat
+from ..utils import handle_chat_id
 
 
 class ChatResource(Resource):
@@ -60,7 +56,8 @@ class ChatResource(Resource):
     def put(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        args = chat_parser.parse_args()
+        parser = ChatAddParser()
+        args = parser.parse_args()
         if args['users'] is not None:
             args['users'] = [handle_user_id(user_id, session) for user_id in args['users']]
         for key, val in filter(lambda x: x[1] is not None, args.items()):
@@ -91,8 +88,9 @@ class ChatPublicListResource(Resource):
     @staticmethod
     def post():
         session = db_session.create_session()
-        args = chat_parser.parse_args()
-        args['users'] = [handle_user_id(user_id, session) for user_id in args['users']]
+        parser = ChatAddParser()
+        args = parser.parse_args()
+        args['users'] = [handle_user_id(user_id, session) for user_id in args['users'].split(',')]
         session.add(Chat(**args))
         session.commit()
         return jsonify({'message': 'OK'})
