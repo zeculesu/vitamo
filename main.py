@@ -9,6 +9,7 @@ from data.api.chat_resource import ChatResource, ChatPublicListResource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JSON_AS_ASCII'] = False
 api = Api(app)
 api.add_resource(UserResource, '/api/users/<int:user_id>')
 api.add_resource(UserPublicListResource, '/api/users')
