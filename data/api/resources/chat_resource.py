@@ -3,12 +3,11 @@ from flask_restful import Resource, abort
 
 from ... import db_session
 from ...models.chats import Chat
-from .user_resource import handle_user_id
 
 from ..parsers.base import MethodParser
 from ..parsers.chats import *
 
-from ..utils import handle_chat_id
+from ..utils import handle_user_id, handle_chat_id
 
 
 class ChatResource(Resource):

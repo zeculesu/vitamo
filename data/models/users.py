@@ -1,4 +1,3 @@
-import os.path
 from datetime import datetime
 
 from sqlalchemy import Column, String, Integer, DateTime, Table, ForeignKey
