@@ -19,7 +19,11 @@ user_to_user = Table('user_to_user', SQLAlchemyBase.metadata,
 class User(SQLAlchemyBase, SerializerMixin):
     __tablename__ = 'users'
 
-    serialize_fields = ('id', 'email', 'username', 'description', 'logo', 'chats', 'created_date')
+    serialize_fields = ('id', 'email', 'username',
+                        'description', 'logo',
+                        'chats.id', 'chats.title', 'chats.logo',
+                        'chats.users.id', 'chats.users.username',
+                        'created_date')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     email = Column(String, unique=True, index=True)
@@ -39,11 +43,7 @@ class User(SQLAlchemyBase, SerializerMixin):
 
     def to_dict(self, only=(), rules=(),
                 date_format=None, datetime_format=None, time_format=None, tzinfo=None,
-                decimal_format=None, serialize_types=None, users_in_chats=True):
-        if not users_in_chats:
-            chats = [ch.to_dict(only=('id', 'title', 'logo')) for ch in self.chats]
-            output = SerializerMixin.to_dict(self, only=tuple(filter(lambda x: x != 'chats', only)))
-            output['chats'] = chats
-            return output
+                decimal_format=None, serialize_types=None):
+        only = only if only else self.serialize_fields
         return SerializerMixin.to_dict(self, only, rules, date_format, datetime_format, time_format,
                                        tzinfo, decimal_format, serialize_types)

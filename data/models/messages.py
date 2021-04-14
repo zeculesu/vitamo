@@ -14,7 +14,8 @@ user_to_message = Table('user_to_message', SQLAlchemyBase.metadata,
 class Message(SQLAlchemyBase, SerializerMixin):
     __tablename__ = 'messages'
 
-    serialize_fields = ('id', 'text', 'sender', 'chat_id', 'current_chat_id',
+    serialize_fields = ('id', 'text', 'chat_id', 'current_chat_id',
+                        'sender.id', 'sender.username', 'sender.chats'
                         'attachments', 'is_read', 'is_edited', 'sent_time')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
@@ -29,12 +30,12 @@ class Message(SQLAlchemyBase, SerializerMixin):
     is_edited = Column(Boolean, default=False)
     sent_time = Column(DateTime, default=datetime.now)
 
-    def to_dict(self, with_chats=True, **kwargs):
-        output = SerializerMixin.to_dict(self, only=self.serialize_fields)
-        if with_chats:
-            chats = [chat.to_dict() for chat in self.chats]
-            output['chats'] = chats
-        return output
+    def to_dict(self, only=(), rules=(),
+                date_format=None, datetime_format=None, time_format=None, tzinfo=None,
+                decimal_format=None, serialize_types=None):
+        only = only if only else self.serialize_fields
+        return SerializerMixin.to_dict(self, only, rules, date_format, datetime_format,
+                                       time_format, tzinfo, decimal_format, serialize_types)
 
 
 if __name__ == '__main__':

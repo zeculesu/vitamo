@@ -14,7 +14,9 @@ messages_to_chat = Table('messages_to_chat', SQLAlchemyBase.metadata,
 class Chat(SQLAlchemyBase, SerializerMixin):
     __tablename__ = 'chats'
 
-    serialize_fields = ('id', 'title', 'logo', 'users', 'messages')
+    serialize_fields = ('id', 'title', 'logo',
+                        'users.id', 'users.username', 'users.chats',
+                        'messages.id', 'messages.sender', 'messages.text')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     title = Column(String, nullable=True)
@@ -23,12 +25,7 @@ class Chat(SQLAlchemyBase, SerializerMixin):
 
     def to_dict(self, only=(), rules=(),
                 date_format=None, datetime_format=None, time_format=None, tzinfo=None,
-                decimal_format=None, serialize_types=None, users_in_chats=True):
-        if not users_in_chats:
-            only.pop(only.index('users'))
-            chats = [ch.to_dict(only=only) for ch in self.chats]
-            output = SerializerMixin.to_dict(self, only=tuple(filter(lambda x: x != 'chats', only)))
-            output['chats'] = chats
-            return output
-        return SerializerMixin.to_dict(self, only, rules, date_format, datetime_format, time_format,
-                                       tzinfo, decimal_format, serialize_types)
+                decimal_format=None, serialize_types=None):
+        only = only if only else self.serialize_fields
+        return SerializerMixin.to_dict(self, only, rules, date_format, datetime_format,
+                                       time_format, tzinfo, decimal_format, serialize_types)

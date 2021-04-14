@@ -14,7 +14,7 @@ class MessageResource(Resource):
     def get(message_id):
         session = db_session.create_session()
         message = handle_message_id(message_id, session)
-        return jsonify({'message': message.to_dict(message.serialize_fields)})
+        return jsonify({'message': message.to_dict()})
 
     @staticmethod
     def put(message_id):
@@ -48,9 +48,8 @@ class MessageListResource(Resource):
     @staticmethod
     def get():
         session = db_session.create_session()
-        messages = [message.to_dict(Message.serialize_fields) for message
-                    in session.query(Message).all()]
-        return jsonify({'messages': messages})
+        messages = session.query(Message).all()
+        return jsonify({'messages': [msg.to_dict() for msg in messages]})
 
     @staticmethod
     def post():

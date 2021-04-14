@@ -10,10 +10,11 @@ from ..utils import handle_user_id
 
 
 class UserResource(Resource):
-    def get(self, user_id):
+    @staticmethod
+    def get(user_id):
         session = db_session.create_session()
         user = handle_user_id(user_id, session)
-        return jsonify({'user': user.to_dict(only=User.serialize_fields, users_in_chats=False)})
+        return jsonify({'user': user.to_dict()})
 
     def put(self, user_id):
         session = db_session.create_session()
@@ -38,13 +39,10 @@ class UserResource(Resource):
 
 
 class UserPublicListResource(Resource):
-    user_fields = ('id', 'email', 'username', 'description',
-                   'logo', 'chats', 'created_date')
-
-    def get(self):
+    @staticmethod
+    def get():
         session = db_session.create_session()
-        users = [user.to_dict(only=self.user_fields, users_in_chats=False)
-                 for user in session.query(User).all()]
+        users = [user.to_dict() for user in session.query(User).all()]
         return jsonify({'users': users})
 
     @staticmethod

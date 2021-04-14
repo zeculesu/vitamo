@@ -15,7 +15,7 @@ class ChatResource(Resource):
     def get(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        return jsonify({'chat': chat.to_dict(only=Chat.serialize_fields, chats_in_users=False)})
+        return jsonify({'chat': chat.to_dict()})
 
     @staticmethod
     def addUser(chat_id, user_id):
@@ -75,14 +75,11 @@ class ChatResource(Resource):
 
 
 class ChatPublicListResource(Resource):
-    chat_fields = ('id', 'title', 'logo', 'users', 'messages')
-
     @staticmethod
     def get():
         session = db_session.create_session()
         chats = session.query(Chat).all()
-        return jsonify({'chats': [ch.to_dict(only=Chat.serialize_fields, chats_in_users=False)
-                                  for ch in chats]})
+        return jsonify({'chats': [ch.to_dict() for ch in chats]})
 
     @staticmethod
     def post():
