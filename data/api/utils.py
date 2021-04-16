@@ -1,4 +1,6 @@
 from flask_restful import abort
+from flask_jwt_extended import decode_token
+from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 
 from ..models.attachments import Attachment
 from ..models.users import User
@@ -11,6 +13,15 @@ def handle_user_id(user_id, session):
     if not user:
         abort(404, message=f'User {user_id} not found')
     return user
+
+
+def get_current_user(token: str, session):
+    try:
+        return handle_user_id(decode_token(token).get('user'), session)
+    except ExpiredSignatureError:
+        abort(400, message='The token has expired')
+    except InvalidTokenError:
+        abort(400, message='Invalid token')
 
 
 def handle_chat_id(chat_id, session):

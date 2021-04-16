@@ -1,5 +1,4 @@
-import requests
-from flask import jsonify, url_for, request
+from flask import jsonify
 from flask_restful import Resource, abort
 
 from ... import db_session
@@ -61,7 +60,7 @@ class MessageListResource(Resource):
         if args['attachments'] is None:
             args['attachments'] = list()
         chat = handle_chat_id(args['chat_id'], session)
-        for msg in session.query(Message).filter(Chat.id == chat.id and Message.is_read == 0):
+        for msg in session.query(Message).filter((Chat.id == chat.id) & (Message.is_read == 0)):
             msg.is_read = True
             session.merge(msg)
             session.commit()
