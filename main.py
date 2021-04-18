@@ -2,7 +2,7 @@ from datetime import timedelta
 import os.path
 from dotenv import load_dotenv
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
@@ -13,7 +13,7 @@ from data.api.resources.message_resource import MessageResource, MessageListReso
 from data.api.resources.token_resource import TokenResource
 
 load_dotenv()
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./templates', static_folder='./templates/static')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
@@ -29,6 +29,12 @@ api.add_resource(ChatResource, '/api/chats/<int:chat_id>')
 api.add_resource(ChatPublicListResource, '/api/chats')
 api.add_resource(MessageResource, '/api/messages/<int:message_id>')
 api.add_resource(MessageListResource, '/api/messages')
+
+
+@app.route('/', methods=['POST', 'GET'])
+def authorization():
+    return render_template('authorization.html')
+
 
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
