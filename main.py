@@ -2,9 +2,9 @@ import os.path
 from datetime import timedelta
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from flask_jwt_extended import JWTManager
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
 
 from data import db_session
@@ -41,15 +41,22 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
+    print('the user has been loaded')
     return session.query(User).get(user_id)
+
+
+# @app.before_request
+# def make_session_permanent():
+#     session.permanent = True
 
 
 @app.route('/')
 def index():
-    if not current_user.is_authenticated:
-        redirect('/auth')
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
     output = current_user.to_dict()
-    # output['jwt'] = current_user.token
+    print(f'session: {session}')
+    output['token'] = session.get('_token')
     return output
 
 
@@ -57,6 +64,7 @@ def index():
 def authorization():
     if current_user.is_authenticated:
         logout_user()
+        session.permanent = False
     login_form = LoginForm()
     register_form = RegisterForm()
     if request.method == 'POST':
@@ -66,8 +74,9 @@ def authorization():
                 return render_template('authorization.html', login_form=login_form, register_form=register_form,
                                        login_message=message)
             user = get_current_user(token, None)
-            # user.token = token
+            session['_token'] = token
             login_user(user, remember=login_form.keep_signed.data)
+            session.permanent = login_form.keep_signed.data
             return redirect('/')
         elif request.form['submit'] == 'sign up':
             message = add_new_users(register_form.username.data, register_form.email.data,
