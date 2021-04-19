@@ -2,6 +2,7 @@ from flask_restful import abort
 from flask_jwt_extended import decode_token
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 
+from .. import db_session
 from ..models.attachments import Attachment
 from ..models.users import User
 from ..models.chats import Chat
@@ -15,7 +16,8 @@ def handle_user_id(user_id, session):
     return user
 
 
-def get_current_user(token: str, session):
+def get_current_user(token: str, _):
+    session = db_session.create_session()
     try:
         return handle_user_id(decode_token(token).get('user'), session)
     except ExpiredSignatureError:

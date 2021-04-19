@@ -19,62 +19,53 @@
             <div class="col-md-offset-3 col-md-6">
 
                 <div class="tab" role="tabpanel">
-                    <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab"
                                                                   data-toggle="tab">sign in</a></li>
                         <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab"
                                                    data-toggle="tab">sign up</a></li>
                     </ul>
-                    <!-- Tab panes -->
                     <div class="tab-content tabs">
                         <div role="tabpanel" class="tab-pane fade in active" id="Section1">
                             <form method="post" class="form-horizontal">
+                                {{ login_form.hidden_tag() }}
+                                {% if login_message %}
+                                <div class="alert alert-danger">{{ login_message }}</div>
+                                {% endif %}
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">username</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1">
+                                    {{ login_form.username.label }}
+                                    {{ login_form.username(class="form-control") }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1">
+                                    {{ login_form.password.label }}
+                                    {{ login_form.password(class="form-control") }}
                                 </div>
                                 <div class="form-group">
-                                    <div class="main-checkbox">
-                                        <input value="None" id="checkbox1" name="check" type="checkbox">
-                                        <label for="checkbox1"></label>
-                                    </div>
+                                    {{ login_form.keep_signed(class="main-checkbox") }}
                                     <span class="text">Keep me Signed in</span>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" name="submit_button" value="sigh_in" class="btn btn-default">
-                                        Sign in
-                                    </button>
+                                    {{ login_form.submit(class="btn btn-default", value="sign in") }}
                                 </div>
                             </form>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="Section2">
                             <form method="post" class="form-horizontal">
+                                {{ register_form.hidden_tag() }}
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Name</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="name">
+                                    {{ register_form.username.label }}
+                                    {{ register_form.username(class="form-control") }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" name="email">
+                                    {{ register_form.email.label }}
+                                    {{ register_form.email(class="form-control", type="email") }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1"
-                                           name="password">
+                                    {{ register_form.password.label }}
+                                    {{ register_form.password(class="form-control") }}
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Description</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="description">
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-default" name="submit_button" value="sigh_up">
-                                        Sign up
-                                    </button>
+                                    {{ register_form.submit(class="btn btn-default", value="sign up") }}
                                 </div>
                             </form>
                         </div>
