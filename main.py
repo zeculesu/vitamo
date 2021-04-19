@@ -48,11 +48,15 @@ def load_user(user_id):
 def index():
     if not current_user.is_authenticated:
         redirect('/auth')
-    return current_user.to_dict()
+    output = current_user.to_dict()
+    # output['jwt'] = current_user.token
+    return output
 
 
 @app.route('/auth', methods=['GET', 'POST'])
 def authorization():
+    if current_user.is_authenticated:
+        logout_user()
     login_form = LoginForm()
     register_form = RegisterForm()
     if request.method == 'POST':
@@ -62,7 +66,7 @@ def authorization():
                 return render_template('authorization.html', login_form=login_form, register_form=register_form,
                                        login_message=message)
             user = get_current_user(token, None)
-            user.token = token
+            # user.token = token
             login_user(user, remember=login_form.keep_signed.data)
             return redirect('/')
         elif request.form['submit'] == 'sign up':
@@ -73,20 +77,6 @@ def authorization():
                                        register_message=message)
             return render_template('authorization.html', login_form=LoginForm(), register_form=RegisterForm())
     return render_template('authorization.html', login_form=login_form, register_form=register_form)
-
-
-# @app.route('/', methods=['POST', 'GET'])
-# def authorization():
-#     if request.method == 'GET':
-#         return render_template('authorization.html')
-#     elif request.method == 'POST':
-#         if request.form['submit_button'] == 'sigh_in':
-#             pass
-#             # response = authorize_user(request.form['name'], request.form['password'])
-#         elif request.form['submit_button'] == 'sigh_up':
-#             response = add_new_users(request.form['name'], request.form['email'], request.form['password'],
-#                                      request.form['description'])
-#         return response.text
 
 
 if __name__ == '__main__':
