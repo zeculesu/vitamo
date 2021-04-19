@@ -1,7 +1,6 @@
 from datetime import timedelta
 import os.path
 
-import requests
 from dotenv import load_dotenv
 
 from flask import Flask, render_template, request
@@ -13,6 +12,8 @@ from data.api.resources.user_resource import UserResource, UserPublicListResourc
 from data.api.resources.chat_resource import ChatResource, ChatPublicListResource
 from data.api.resources.message_resource import MessageResource, MessageListResource
 from data.api.resources.token_resource import TokenResource
+
+from work_api import add_new_users, authorize_user
 
 load_dotenv()
 app = Flask(__name__, template_folder='./templates', static_folder='./templates/static')
@@ -38,11 +39,12 @@ def authorization():
     if request.method == 'GET':
         return render_template('authorization.html')
     elif request.method == 'POST':
-        url = 'http://127.0.0.1:5000/api/users'
-        response = requests.post(url, params={'username': request.form['name'],
-                                              'email': request.form['email'],
-                                              'password': request.form['password'],
-                                              'description': request.form['description']})
+        if request.form['submit_button'] == 'sigh_in':
+            pass
+            # response = authorize_user(request.form['name'], request.form['password'])
+        elif request.form['submit_button'] == 'sigh_up':
+            response = add_new_users(request.form['name'], request.form['email'], request.form['password'],
+                                     request.form['description'])
         return response.text
 
 
