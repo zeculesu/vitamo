@@ -9,7 +9,7 @@ from flask_restful import Api
 
 from data import db_session
 from data.models.users import User
-from data.api.resources.chat_resource import ChatResource, ChatPublicListResource
+from data.api.resources.chat_resource import ChatResource, ChatListResource
 from data.api.resources.message_resource import MessageResource, MessageListResource
 from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
@@ -31,7 +31,7 @@ api.add_resource(TokenResource, '/api/authorize')
 api.add_resource(UserResource, '/api/users/<int:user_id>')
 api.add_resource(UserPublicListResource, '/api/users')
 api.add_resource(ChatResource, '/api/chats/<int:chat_id>')
-api.add_resource(ChatPublicListResource, '/api/chats')
+api.add_resource(ChatListResource, '/api/chats')
 api.add_resource(MessageResource, '/api/messages/<int:message_id>')
 api.add_resource(MessageListResource, '/api/messages')
 login_manager = LoginManager()

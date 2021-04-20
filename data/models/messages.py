@@ -21,6 +21,7 @@ class Message(SQLAlchemyBase, SerializerMixin):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     text = Column(String, nullable=True)
     sender = Column(Integer, ForeignKey('users.id'), nullable=True)
+    sender_obj = relation('User', foreign_keys=sender)
     chat_id = Column(Integer, ForeignKey('chats.id'))
     current_chat_id = Column(Integer, ForeignKey('chats.id'))
     chat = relation('Chat', foreign_keys=current_chat_id)

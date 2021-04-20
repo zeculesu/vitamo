@@ -90,9 +90,10 @@ class ChatResource(Resource):
         return jsonify({'message': 'OK'})
 
 
-class ChatPublicListResource(Resource):
+class ChatListResource(Resource):
     @staticmethod
     def get():
+        get_current_user(TokenParser().parse_args()['token'])
         session = db_session.create_session()
         chats = session.query(Chat).all()
         return jsonify({'chats': [ch.to_dict() for ch in chats]})
@@ -100,10 +101,12 @@ class ChatPublicListResource(Resource):
     @staticmethod
     def post():
         session = db_session.create_session()
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         parser = ChatAddParser()
         args = parser.parse_args()
-        users = [handle_user_id(user_id, session) for user_id in args['users'].split(',')]
-        # args['users'] =
+        users = [current_user]
+        for user_id in args['users'].split(','):
+            users.append(handle_user_id(user_id, session))
         session.add(Chat(**args))
         session.commit()
         return jsonify({'message': 'OK'})

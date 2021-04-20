@@ -1,16 +1,18 @@
 from flask import jsonify
 from flask_restful import Resource, abort
 
+from ..parsers.base import TokenParser
 from ... import db_session
 from ...models.chats import Chat
 from ...models.messages import Message
 from ..parsers.messages import MessageAddParser, MessagePutParser
-from ..utils import handle_message_id, handle_attachment_id, handle_chat_id
+from ..utils import handle_message_id, handle_attachment_id, handle_chat_id, get_current_user
 
 
 class MessageResource(Resource):
     @staticmethod
     def get(message_id):
+        get_current_user(TokenParser().parse_args()['token'])
         session = db_session.create_session()
         message = handle_message_id(message_id, session)
         return jsonify({'message': message.to_dict()})
@@ -19,6 +21,9 @@ class MessageResource(Resource):
     def put(message_id):
         session = db_session.create_session()
         message = handle_message_id(message_id, session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
+        if current_user.id != message.sender_obj:
+            abort(403, 'You have no access to this Message')
         parser = MessagePutParser()
         args = parser.parse_args()
         if args['chat_id'] is not None:
@@ -38,6 +43,9 @@ class MessageResource(Resource):
     def delete(message_id):
         session = db_session.create_session()
         message = handle_message_id(message_id, session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
+        if current_user.id != message.sender_obj:
+            abort(403, 'You have no access to this Message')
         session.delete(message)
         session.commit()
         return jsonify({'message': 'OK'})
@@ -53,6 +61,7 @@ class MessageListResource(Resource):
     @staticmethod
     def post():
         session = db_session.create_session()
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         parser = MessageAddParser()
         args = parser.parse_args()
         if not args['text'] and not args['attachments']:
@@ -64,6 +73,7 @@ class MessageListResource(Resource):
             msg.is_read = True
             session.merge(msg)
             session.commit()
+        args['sender'] = current_user.id
         message = Message(**args)
         session.add(message)
         session.commit()
