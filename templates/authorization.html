@@ -20,13 +20,24 @@
 
                 <div class="tab" role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab"
+                        {% if not register_message %}
+                        <li role="presentation" class="active"><a href="#login" aria-controls="home" role="tab"
                                                                   data-toggle="tab">sign in</a></li>
-                        <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab"
+                        <li role="presentation"><a href="#register" aria-controls="profile" role="tab"
                                                    data-toggle="tab">sign up</a></li>
+                        {% else %}
+                        <li role="presentation"><a href="#login" aria-controls="home" role="tab"
+                                                                  data-toggle="tab">sign in</a></li>
+                        <li role="presentation" class="active"><a href="#register" aria-controls="profile" role="tab"
+                                                   data-toggle="tab">sign up</a></li>
+                        {% endif %}
                     </ul>
                     <div class="tab-content tabs">
-                        <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                        {% if not register_message %}
+                        <div role="tabpanel" class="tab-pane fade in active" id="login">
+                        {% else %}
+                        <div role="tabpanel" class="tab-pane fade" id="login">
+                        {% endif %}
                             <form method="post" class="form-horizontal">
                                 {{ login_form.hidden_tag() }}
                                 {% if login_message %}
@@ -49,8 +60,15 @@
                                 </div>
                             </form>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="Section2">
+                        {% if not register_message %}
+                        <div role="tabpanel" class="tab-pane fade" id="register">
+                        {% else %}
+                        <div role="tabpanel" class="tab-pane fade in active" id="register">
+                        {% endif %}
                             <form method="post" class="form-horizontal">
+                                {% if register_message %}
+                                <div class="alert alert-danger">{{ register_message }}</div>
+                                {% endif %}
                                 {{ register_form.hidden_tag() }}
                                 <div class="form-group">
                                     {{ register_form.username.label }}

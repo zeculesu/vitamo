@@ -2,7 +2,7 @@ import os.path
 from datetime import timedelta
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, redirect, session
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -15,7 +15,7 @@ from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
 from data.api.utils import get_current_user
 from data.forms.users import LoginForm, RegisterForm
-from work_api import authorize_user, add_new_users
+from work_api import *
 
 load_dotenv()
 app = Flask(__name__, template_folder='./templates')
@@ -48,9 +48,18 @@ def load_user(user_id):
 def index():
     if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         return redirect('/auth')
-    output = current_user.to_dict()
-    output['token'] = session.get('_token')
-    return output
+    chats, error = get_chats(session.get('_token'))  # Список чатов
+    if error:
+        return render_template('error.html', error=error)
+    return render_template('index.html', chats=chats)
+
+
+@app.route('/chats/<int:chat_id>')
+def show_chat(chat_id):
+    chat, error = get_chat(chat_id, session.get('_token'))
+    if error:
+        return render_template('error.html', error=error)
+    return render_template('chat.html', chat=chat)
 
 
 @app.route('/auth', methods=['GET', 'POST'])

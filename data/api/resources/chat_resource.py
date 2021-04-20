@@ -14,7 +14,7 @@ class ChatResource(Resource):
     @staticmethod
     def get(chat_id):
         session = db_session.create_session()
-        current_user = get_current_user(TokenParser().parse_args()['token'], session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         chat = handle_chat_id(chat_id, session)
         if chat not in current_user.chats:
             abort(401, message='You have no access to this Chat')
@@ -47,7 +47,7 @@ class ChatResource(Resource):
     def post(self, chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'], session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         if chat not in current_user.chats:
             abort(401, message='You have no access to this Chat')
         method_parser = MethodParser()
@@ -65,7 +65,7 @@ class ChatResource(Resource):
     def put(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'], session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         if chat not in current_user.chats:
             abort(401, message='You have no access to this Chat')
         parser = ChatAddParser()
@@ -82,7 +82,7 @@ class ChatResource(Resource):
     def delete(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'], session)
+        current_user = get_current_user(TokenParser().parse_args()['token'])
         if chat not in current_user.chats:
             abort(401, message='You have no access to this Chat')
         session.delete(chat)
@@ -102,7 +102,8 @@ class ChatPublicListResource(Resource):
         session = db_session.create_session()
         parser = ChatAddParser()
         args = parser.parse_args()
-        args['users'] = [handle_user_id(user_id, session) for user_id in args['users'].split(',')]
+        users = [handle_user_id(user_id, session) for user_id in args['users'].split(',')]
+        # args['users'] =
         session.add(Chat(**args))
         session.commit()
         return jsonify({'message': 'OK'})
