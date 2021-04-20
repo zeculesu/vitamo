@@ -9,7 +9,7 @@ from ...models.users import User
 
 class TokenResource(Resource):
     @staticmethod
-    def post():
+    def get():
         session = db_session.create_session()
         parser = TokenGetParser()
         args = parser.parse_args()

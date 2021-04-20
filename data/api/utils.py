@@ -16,7 +16,7 @@ def handle_user_id(user_id, session):
     return user
 
 
-def get_current_user(token: str, _):
+def get_current_user(token):
     session = db_session.create_session()
     try:
         return handle_user_id(decode_token(token).get('user'), session)

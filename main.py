@@ -41,13 +41,7 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
-    print('the user has been loaded')
     return session.query(User).get(user_id)
-
-
-# @app.before_request
-# def make_session_permanent():
-#     session.permanent = True
 
 
 @app.route('/')
@@ -55,7 +49,6 @@ def index():
     if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         return redirect('/auth')
     output = current_user.to_dict()
-    print(f'session: {session}')
     output['token'] = session.get('_token')
     return output
 
@@ -65,6 +58,7 @@ def authorization():
     if current_user.is_authenticated:
         logout_user()
         session.permanent = False
+        session.pop('_token')
     login_form = LoginForm()
     register_form = RegisterForm()
     if request.method == 'POST':
@@ -73,7 +67,7 @@ def authorization():
             if message:
                 return render_template('authorization.html', login_form=login_form, register_form=register_form,
                                        login_message=message)
-            user = get_current_user(token, None)
+            user = get_current_user(token)
             session['_token'] = token
             login_user(user, remember=login_form.keep_signed.data)
             session.permanent = login_form.keep_signed.data
