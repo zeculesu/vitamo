@@ -7,10 +7,8 @@ body{
     font-size: 20px;
     height: 100%;
 }
-div {
-    min-height:100%;
-    background: #ebebeb;
-    text: black;
+p{
+    color: #000000
 }
 .title{
     font-size: 36px;
@@ -32,7 +30,7 @@ header{height: 60px;
         }
     header h1{
         margin-top:5px;
-        } 
+        }
 
 a:hover,a:focus{
     outline: none;
@@ -185,21 +183,17 @@ a:hover,a:focus{
     outline: none;
     box-shadow: none;
 }
-.form-horizontal .forgot-pass{
-    border-top: 1px solid #615f6c;
-    margin: 0;
-    text-align: center;
-}
 .chat-list {
     width: 20%;
     float: left;
-    weight: 20%
+    weight: 20%;
     float: left;
 }
 .current-chat {
     width: 80%;
     float: right;
     background: #ebebeb;
-    text: black;
+    height: 100vh;
+    text-align: center;
     min-height:100%
 }

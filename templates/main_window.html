@@ -2,14 +2,14 @@
 
 {% block content %}
 <div>
-  <div class="chat-list">
-    {% for chat in chats %}
+  <div class="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
+    {% for chat in ['hello', 'bb', 'aa'] %}
 <!--    {{ chat.title }}-->
     <div class="alert alert-success">{{ chat.title }}</div>
     {% endfor %}
   </div>
-  <div class="current-chat">
-    Тут чат!
+  <div class="current-chat" style="float: right; background: #ebebeb; text: black; ">
+    <p style="text: black">Тут чат!<p>
   </div>
 </div>
 {% endblock %}
