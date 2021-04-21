@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="position: relative; display: inline-block">
+<div>
   <div class="chat-list">
     {% for chat in chats %}
-    {{ chat.title }}
-<!--    <div class="alert alert-success">{{ chat.title }}</div>-->
+<!--    {{ chat.title }}-->
+    <div class="alert alert-success">{{ chat.title }}</div>
     {% endfor %}
   </div>
   <div class="current-chat">

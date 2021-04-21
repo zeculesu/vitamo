@@ -5,10 +5,12 @@ body{
     padding-top:30px;
     color: #ebebeb;
     font-size: 20px;
+    height: 100%;
 }
-table {
-   border-radius: 5px;
-   background-color: #ebebeb;
+div {
+    min-height:100%;
+    background: #ebebeb;
+    text: black;
 }
 .title{
     font-size: 36px;
@@ -191,7 +193,13 @@ a:hover,a:focus{
 .chat-list {
     width: 20%;
     float: left;
+    weight: 20%
+    float: left;
 }
 .current-chat {
     width: 80%;
+    float: right;
+    background: #ebebeb;
+    text: black;
+    min-height:100%
 }
