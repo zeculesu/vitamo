@@ -51,7 +51,17 @@ def index():
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
         return render_template('error.html', error=error)
-    return render_template('index.html', chats=chats)
+    return render_template('main_window.html', chats=chats)
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error.html', error=error), 404
+
+
+@app.errorhandler(500)
+def not_found_error(error):
+    return render_template('error.html', error=error), 500
 
 
 @app.route('/chats/<int:chat_id>')

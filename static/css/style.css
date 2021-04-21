@@ -6,6 +6,10 @@ body{
     color: #ebebeb;
     font-size: 20px;
 }
+table {
+   border-radius: 5px;
+   background-color: #ebebeb;
+}
 .title{
     font-size: 36px;
     padding-top: 6px;
@@ -183,12 +187,4 @@ a:hover,a:focus{
     border-top: 1px solid #615f6c;
     margin: 0;
     text-align: center;
-}
-.form-horizontal .forgot-pass .btn{
-    width: auto;
-    background: transparent;
-    margin: 30px 0 0 0;
-    color: #615f6c;
-    text-transform: capitalize;
-    transition: all 0.3s ease 0s;
 }

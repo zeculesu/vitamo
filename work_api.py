@@ -11,7 +11,7 @@ def add_new_users(user_name, email, password):
                                                                 'password': password}))
     if not response:
         return 'Server Error'
-    if response.get('message') != 'OK':
+    if response.get('message') is not None and response.get('message') != 'OK':
         return response['message']
 
 
