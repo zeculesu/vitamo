@@ -1,13 +1,11 @@
 from flask import jsonify
 from flask_restful import Resource, abort
 
-from ... import db_session
-from ...models.chats import Chat
-
 from ..parsers.base import MethodParser, TokenParser
 from ..parsers.chats import *
-
 from ..utils import get_current_user, handle_user_id, handle_chat_id
+from ... import db_session
+from ...models.chats import Chat
 
 
 class ChatResource(Resource):
@@ -104,9 +102,13 @@ class ChatListResource(Resource):
         current_user = get_current_user(TokenParser().parse_args()['token'])
         parser = ChatAddParser()
         args = parser.parse_args()
-        users = [current_user]
-        for user_id in args['users'].split(','):
-            users.append(handle_user_id(user_id, session))
-        session.add(Chat(**args))
+        users = [str(current_user.id)] + [user for user in args.pop('users').split(',')
+                                          if user != str(current_user.id)]
+        print(f'users: {list(users)}')
+        chat = Chat(**args)
+        session.add(chat)
+        session.commit()
+        chat.users = [handle_user_id(user_id, session) for user_id in users]
+        session.merge(chat)
         session.commit()
         return jsonify({'message': 'OK'})

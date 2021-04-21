@@ -188,3 +188,10 @@ a:hover,a:focus{
     margin: 0;
     text-align: center;
 }
+.chat-list {
+    width: 20%;
+    float: left;
+}
+.current-chat {
+    width: 80%;
+}

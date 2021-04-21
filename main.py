@@ -22,7 +22,7 @@ app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['JWT_EXPIRES'] = timedelta(seconds=10 ** 10)
+app.config['JWT_EXPIRES'] = timedelta(days=365)
 app.config['JWT_IDENTITY_CLAIM'] = 'user'
 app.config['JWT_HEADER_NAME'] = 'authorization'
 app.jwt = JWTManager(app)

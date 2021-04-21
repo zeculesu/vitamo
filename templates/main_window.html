@@ -1,27 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
-    <title>Vitamo</title>
-</head>
-<body>
-    <header>
-        <div class="title"><label>Vitamo</label></div>
-    </header>
-    <div>
-        <table width="100%">
-        <tr>
-            <td width="20%">Чаты</td>
-           {% for item in chats %}
-                <th>item['name']</th>
-           {% endfor %}
-          <td width="20%">Ячейка 1</td>
-          <td width="80%" height="70%"></td>
-        </tr>
-    </table>
-    </div>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="position: relative; display: inline-block">
+  <div class="chat-list">
+    {% for chat in chats %}
+    {{ chat.title }}
+<!--    <div class="alert alert-success">{{ chat.title }}</div>-->
+    {% endfor %}
+  </div>
+  <div class="current-chat">
+    Тут чат!
+  </div>
+</div>
+{% endblock %}
