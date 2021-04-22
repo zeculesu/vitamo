@@ -8,14 +8,8 @@
     <div class="alert alert-success">{{ chat.title }}</div>
     {% endfor %}
   </div>
-  <div class="current-chat">
-    {% for message in ['hello', 'bb', 'aa'] %}
-   <div class="message">{{ message.title }}</div>
-    {% endfor %}
-     <div class="current-message">
-    <input class="input-mess" type="text" />
-    <button class="send-button">Send</button>
-  </div>
+  <div class="current-chat" style="float: right; background: #ebebeb; text: black; ">
+    <p style="text: black">Тут чат!<p>
   </div>
 </div>
 {% endblock %}
