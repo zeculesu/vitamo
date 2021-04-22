@@ -193,7 +193,41 @@ a:hover,a:focus{
     width: 80%;
     float: right;
     background: #ebebeb;
-    height: 100vh;
+    height: 90vh;
     text-align: center;
-    min-height:100%
+}
+.current-message {
+    width: 100%;
+    background: #ebebeb;
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    float: right;
+    padding: 3px 18px;
+    background: #ebebeb;
+}
+.send-button{
+    background: #2f0b45;
+    border-radius: 5px;
+    border: none;
+    margin-left: 3px;
+    padding: 3px 28px;
+    text-decoration: none;
+    display: inline-block;
+}
+.input-mess{
+    width: 100%;
+    color: black;
+}
+.message{
+    color: black;
+    width: 1000px;
+    float: left;
+    background: #fff7ff;
+    display: flex;
+    padding: 3px 18px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 10px;
+    border:4px #2f0b45  solid;
 }
