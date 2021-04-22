@@ -2,21 +2,21 @@
 
 {% block content %}
 <div>
-  <div class="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
-    {% for chat in ['hello', 'bb', 'aa'] %}
-<!--    {{ chat.title }}-->
+  <div id="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
+    {% for chat in chats %}
     <div class="alert alert-success">{{ chat.title }}</div>
     {% endfor %}
-     <div class="current-message">
-    <input class="input-mess" type="text" />
-    <button class="send-button">Send</button>
   </div>
-  <div class="current-chat" style="float: right; background: #ebebeb; text: black; ">
-    <p style="text: black">Тут чат!<p>
-  </div>
-</div>
-{% endblock %}
+    <div class="current-message">
+      <input class="input-mess" type="text"/>
+      <button class="send-button">Send</button>
+    </div>
+    <div class="current-chat" style="float: right; background: #ebebeb; text: black; ">
+      <p style="text: black">Тут чат!
+      <p>
+    </div>
+  {% endblock %}
 
-{% block script %}
-<script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
-{% endblock %}
+  {% block script %}
+  <script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
+  {% endblock %}

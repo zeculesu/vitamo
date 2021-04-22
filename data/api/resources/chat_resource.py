@@ -64,9 +64,9 @@ class ChatResource(Resource):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
         current_user = get_current_user(TokenParser().parse_args()['token'])
-        if chat not in current_user.chats:
+        if chat.id not in [ch.id for ch in current_user.chats]:
             abort(401, message='You have no access to this Chat')
-        parser = ChatAddParser()
+        parser = ChatPutParser()
         args = parser.parse_args()
         if args['users'] is not None:
             args['users'] = [handle_user_id(user_id, session) for user_id in args['users']]
@@ -81,7 +81,7 @@ class ChatResource(Resource):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
         current_user = get_current_user(TokenParser().parse_args()['token'])
-        if chat not in current_user.chats:
+        if chat.id not in [ch.id for ch in current_user.chats]:
             abort(401, message='You have no access to this Chat')
         session.delete(chat)
         session.commit()
@@ -104,7 +104,6 @@ class ChatListResource(Resource):
         args = parser.parse_args()
         users = [str(current_user.id)] + [user for user in args.pop('users').split(',')
                                           if user != str(current_user.id)]
-        print(f'users: {list(users)}')
         chat = Chat(**args)
         session.add(chat)
         session.commit()

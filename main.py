@@ -1,3 +1,4 @@
+import json
 import os.path
 import time
 from datetime import timedelta
@@ -9,15 +10,15 @@ from flask_login import LoginManager, login_user, logout_user, current_user, Ano
 from flask_restful import Api
 
 from data import db_session
-from data.models.users import User
 from data.api.resources.chat_resource import ChatResource, ChatListResource
 from data.api.resources.message_resource import MessageResource, MessageListResource
 from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
 from data.api.utils import get_current_user
 from data.forms.users import LoginForm, RegisterForm
-from work_api import *
+from data.models.users import User
 from utils import assert_sorted_data
+from work_api import *
 
 load_dotenv()
 app = Flask(__name__, template_folder='./templates')
@@ -58,18 +59,24 @@ def index():
 
 @app.route('/listen')
 def listen():
-    def respond_to_client():
-        rest_chats, error = get_chats(session.get('_token'))
+    token = session.get('_token')
+    host_url = request.host_url
+
+    def respond_to_client(token, host_url):
+        rest_chats, error = get_chats(token, host_url=host_url)
         if error:
             return f'data: {error}\nevent: alert\n\n'
         while True:
-            chats, error = get_chats(session.get('_token'))
+            chats, error = get_chats(token, host_url=host_url)
             if error:
                 return f'data: {error}\nevent: alert\n\n'
-            if assert_sorted_data(rest_chats, chats):
-                yield f'data: {chats}\nevent: new-message\n\n'
-            time.sleep(1)
-    return Response(respond_to_client(), mimetype='text/event-stream')
+            if assert_sorted_data(rest_chats, chats) is not None:
+                rest_chats = chats[:]
+                yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
+            yield 'event: online\n\n'
+            time.sleep(2.5)
+
+    return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
 
 @app.errorhandler(404)
