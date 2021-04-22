@@ -195,13 +195,15 @@ a:hover,a:focus{
     background: #ebebeb;
     height: 90vh;
     text-align: center;
+    overflow-y: scroll
 }
 .current-message {
     width: 100%;
     background: #ebebeb;
     display: flex;
     align-items: flex-end;
-    height: 100%;
+    height: 80vh;
+    max-height: 90%;
     float: right;
     padding: 3px 18px;
     background: #ebebeb;
@@ -213,7 +215,6 @@ a:hover,a:focus{
     margin-left: 3px;
     padding: 3px 28px;
     text-decoration: none;
-    display: inline-block;
 }
 .input-mess{
     width: 100%;
@@ -221,7 +222,7 @@ a:hover,a:focus{
 }
 .message{
     color: black;
-    width: 1000px;
+    width: 900px;
     float: left;
     background: #fff7ff;
     display: flex;
@@ -229,5 +230,5 @@ a:hover,a:focus{
     margin-top: 5px;
     margin-left: 5px;
     border-radius: 10px;
-    border:4px #2f0b45  solid;
+    border:2px #2f0b45  solid;
 }
