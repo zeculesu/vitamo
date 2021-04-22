@@ -1,8 +1,9 @@
 import os.path
+import time
 from datetime import timedelta
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, session
+from flask import Flask, render_template, redirect, session, Response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -16,6 +17,7 @@ from data.api.resources.user_resource import UserResource, UserPublicListResourc
 from data.api.utils import get_current_user
 from data.forms.users import LoginForm, RegisterForm
 from work_api import *
+from utils import assert_sorted_data
 
 load_dotenv()
 app = Flask(__name__, template_folder='./templates')
@@ -51,7 +53,23 @@ def index():
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
         return render_template('error.html', error=error)
-    return render_template('main_window.html', chats=chats)
+    return render_template('main_window.html', chats=chats, session=session)
+
+
+@app.route('/listen')
+def listen():
+    def respond_to_client():
+        rest_chats, error = get_chats(session.get('_token'))
+        if error:
+            return f'data: {error}\nevent: alert\n\n'
+        while True:
+            chats, error = get_chats(session.get('_token'))
+            if error:
+                return f'data: {error}\nevent: alert\n\n'
+            if assert_sorted_data(rest_chats, chats):
+                yield f'data: {chats}\nevent: new-message\n\n'
+            time.sleep(1)
+    return Response(respond_to_client(), mimetype='text/event-stream')
 
 
 @app.errorhandler(404)
