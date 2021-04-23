@@ -195,7 +195,8 @@ a:hover,a:focus{
     background: #ebebeb;
     height: 90vh;
     text-align: center;
-    overflow-y: scroll
+    overflow-y: scroll;
+    text: black;
 }
 .current-message {
     width: 100%;

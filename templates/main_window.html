@@ -2,19 +2,15 @@
 
 {% block content %}
 <div>
-  <div id="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
-    {% for chat in chats %}
-    <div class="alert alert-success">{{ chat.title }}</div>
+  <div class="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
+    {% for chat in ['hello', 'bb', 'aa'] %}
+<!--    {{ chat.title }}-->
+   <button class="alert alert-info">{{ chat.title }}</button>
     {% endfor %}
   </div>
-    <div class="current-message">
-      <input class="input-mess" type="text"/>
-      <button class="send-button">Send</button>
-    </div>
-    <div class="current-chat" style="float: right; background: #ebebeb; text: black; ">
-      <p style="text: black">Тут чат!
-      <p>
-    </div>
+  <div class="current-chat">
+    <p>Тут чат!</p>
+  </div>
   {% endblock %}
 
   {% block script %}
