@@ -33,8 +33,8 @@ api.add_resource(UserResource, '/api/users/<int:user_id>')
 api.add_resource(UserPublicListResource, '/api/users')
 api.add_resource(ChatResource, '/api/chats/<int:chat_id>')
 api.add_resource(ChatListResource, '/api/chats')
-api.add_resource(MessageResource, '/api/messages/<int:message_id>')
-api.add_resource(MessageListResource, '/api/messages')
+api.add_resource(MessageResource, '/api/chats/<int:chat_id>/messages/<int:message_id>')
+api.add_resource(MessageListResource, '/api/chats/<int:chat_id>/messages')
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -55,6 +55,16 @@ def index():
     response = make_response(render_template('main_window.html', chats=chats))
     response.set_cookie('token', session.get('_token'), max_age=10 ** 10)
     return response
+
+
+@app.route('/chat/<int:chat_id>')
+def show_chat(chat_id):
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
+    chat, error = get_chat(chat_id, session.get('_token'))
+    if error:
+        return render_template('error.html', error=error)
+    return render_template('chat.html', chat=chat)
 
 
 @app.route('/listen')
@@ -87,14 +97,6 @@ def not_found_error(error):
 @app.errorhandler(500)
 def not_found_error(error):
     return render_template('error.html', error=error), 500
-
-
-@app.route('/chats/<int:chat_id>')
-def show_chat(chat_id):
-    chat, error = get_chat(chat_id, session.get('_token'))
-    if error:
-        return render_template('error.html', error=error)
-    return render_template('chat.html', chat=chat)
 
 
 @app.route('/auth', methods=['GET', 'POST'])

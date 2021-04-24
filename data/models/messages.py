@@ -23,7 +23,7 @@ class Message(SQLAlchemyBase, SerializerMixin):
     sender = Column(Integer, ForeignKey('users.id'), nullable=True)
     sender_obj = relation('User', foreign_keys=sender)
     chat_id = Column(Integer, ForeignKey('chats.id'))
-    current_chat_id = Column(Integer, ForeignKey('chats.id'))
+    current_chat_id = Column(Integer, ForeignKey('chats.id'), default=chat_id)
     chat = relation('Chat', foreign_keys=current_chat_id)
     attachments = relation('Attachment')
     viewable_for = relation('User', secondary='user_to_message', backref='messages')

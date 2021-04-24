@@ -198,15 +198,15 @@ a:hover,a:focus{
     outline: none;
     box-shadow: none;
 }
-.chat-list {
+#chat-list {
     float: left;
     width: 20%;
     float: left;
 }
-.chat-list > button {
+#chat-list > button {
     width: 100%;
 }
-.current-chat {
+#current-chat {
     width: 80%;
     float: right;
     background: #ebebeb;

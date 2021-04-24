@@ -1,21 +1,11 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div>
-  <div class="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
-    {% for chat in ['hello', 'bb', 'aa'] %}
-<!--    {{ chat.title }}-->
-   <button class="alert alert-info">{{ chat.title }}</button>
-    {% endfor %}
-  </div>
-  <div class="current-chat">
-    {% for message in ['hello', 'bb', 'aa'] %}
-   <div class="message">{{ message.title }}</div>
-    {% endfor %}
-     <div class="current-message">
-    <input class="input-mess" type="text" />
-    <button class="send-button">Send</button>
-  </div>
-  </div>
+{% for message in chat.messages %}
+<div class="message">
+  <p>{{ message['text'] }}</p>
+  <p>{{ message['sender']['username'] }}</p>
+  <p>{{ message['sent'] }}</p>
 </div>
-{% endblock %}
+{% endfor %}
+<div class="current-message">
+  <input class="input-mess" type="text" />
+  <button class="send-button">Send</button>
+</div>

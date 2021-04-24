@@ -12,9 +12,9 @@ class ChatResource(Resource):
     @staticmethod
     def get(chat_id):
         session = db_session.create_session()
-        current_user = get_current_user(TokenParser().parse_args()['token'])
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         chat = handle_chat_id(chat_id, session)
-        if chat not in current_user.chats:
+        if chat.id not in [ch.id for ch in current_user.chats]:
             abort(401, message='You have no access to this Chat')
         return jsonify({'chat': chat.to_dict()})
 
@@ -45,7 +45,7 @@ class ChatResource(Resource):
     def post(self, chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'])
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         if chat not in current_user.chats:
             abort(401, message='You have no access to this Chat')
         method_parser = MethodParser()
@@ -63,7 +63,7 @@ class ChatResource(Resource):
     def put(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'])
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         if chat.id not in [ch.id for ch in current_user.chats]:
             abort(401, message='You have no access to this Chat')
         parser = ChatPutParser()
@@ -80,7 +80,7 @@ class ChatResource(Resource):
     def delete(chat_id):
         session = db_session.create_session()
         chat = handle_chat_id(chat_id, session)
-        current_user = get_current_user(TokenParser().parse_args()['token'])
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         if chat.id not in [ch.id for ch in current_user.chats]:
             abort(401, message='You have no access to this Chat')
         session.delete(chat)
@@ -91,15 +91,15 @@ class ChatResource(Resource):
 class ChatListResource(Resource):
     @staticmethod
     def get():
-        get_current_user(TokenParser().parse_args()['token'])
         session = db_session.create_session()
+        get_current_user(TokenParser().parse_args()['token'], session)
         chats = session.query(Chat).all()
         return jsonify({'chats': [ch.to_dict() for ch in chats]})
 
     @staticmethod
     def post():
         session = db_session.create_session()
-        current_user = get_current_user(TokenParser().parse_args()['token'])
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         parser = ChatAddParser()
         args = parser.parse_args()
         users = [str(current_user.id)] + [user for user in args.pop('users').split(',')

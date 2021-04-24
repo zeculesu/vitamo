@@ -16,8 +16,8 @@ def handle_user_id(user_id, session):
     return user
 
 
-def get_current_user(token):
-    session = db_session.create_session()
+def get_current_user(token, session=None):
+    session = session if session is not None else db_session.create_session()
     try:
         return handle_user_id(decode_token(token).get('user'), session)
     except ExpiredSignatureError:
