@@ -7,9 +7,33 @@ body{
     font-size: 20px;
     height: 100%;
 }
-p{
+p, a{
     color: #000000
 }
+#main {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+#main:target {display: block;}
+.profile {
+     position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+ }
 .title{
     font-size: 36px;
     padding-top: 6px;
@@ -31,7 +55,20 @@ header{height: 60px;
     header h1{
         margin-top:5px;
         }
-
+    button{
+    width: 140px;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    outline: none;
+    background-color: #190f44;
+    border-radius: 5px;
+    border: none;
+}
+.button1{
+    background: linear-gradient(to top,#4527a0 10%, #2f0b45 90%);
+    right: 0px;
+    }
 a:hover,a:focus{
     outline: none;
     text-decoration: none;
