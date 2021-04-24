@@ -54,7 +54,7 @@ def index():
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
         return render_template('error.html', error=error)
-    return render_template('main_window.html', chats=chats, session=session)
+    return render_template('main_window.html', chats=chats, token=session.get('_token'))
 
 
 @app.route('/listen')

@@ -1,5 +1,5 @@
 from flask_restful import abort
-from flask_jwt_extended import decode_token
+from flask_jwt_extended import decode_token, create_refresh_token
 from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 
 from .. import db_session
@@ -21,6 +21,7 @@ def get_current_user(token):
     try:
         return handle_user_id(decode_token(token).get('user'), session)
     except ExpiredSignatureError:
+        # if token_data.get('refresh_token') is None:
         abort(400, message='The token has expired')
     except InvalidTokenError:
         abort(400, message='Invalid token')

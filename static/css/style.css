@@ -184,10 +184,12 @@ a:hover,a:focus{
     box-shadow: none;
 }
 .chat-list {
+    float: left;
     width: 20%;
     float: left;
-    weight: 20%;
-    float: left;
+}
+.chat-list > button {
+    width: 100%;
 }
 .current-chat {
     width: 80%;
@@ -196,7 +198,7 @@ a:hover,a:focus{
     height: 90vh;
     text-align: center;
     overflow-y: scroll;
-    text: black;
+    color: black;
 }
 .current-message {
     width: 100%;

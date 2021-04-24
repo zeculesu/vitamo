@@ -2,17 +2,20 @@
 
 {% block content %}
 <div>
-  <div class="chat-list" style="float: left; weight: 20%; background: #ebebeb; text: black;">
-    {% for chat in ['hello', 'bb', 'aa'] %}
-<!--    {{ chat.title }}-->
-   <button class="alert alert-info">{{ chat.title }}</button>
+  <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
+    {% for chat in chats %}
+   <button class="alert alert-info" style="width: 100%;" onclick="deleteChat()">{{ chat.title }}</button>
     {% endfor %}
   </div>
   <div class="current-chat">
     <p>Тут чат!</p>
   </div>
+
   {% endblock %}
 
   {% block script %}
+  <script>
+    function DeleteChat ()
+  </script>
   <script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
   {% endblock %}
