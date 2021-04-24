@@ -18,17 +18,5 @@
     <button class = 'button1'>Profile</button>
   </form>
 </header>
-<div>
-   <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
-    {% for chat in chats %}
-   <button id="chat-{{ chat['id'] }}" class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat['id'] }})">
-       {{ chat.title }}
-   </button>
-    {% endfor %}
-  </div>
-  <div class="current-chat">
-    <p>Тут чат!</p>
-  </div>
-</div>
 </body>
 </html>

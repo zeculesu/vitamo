@@ -126,6 +126,11 @@ def authorization():
     return render_template('authorization.html', login_form=login_form, register_form=register_form)
 
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
     app.run()
