@@ -1,10 +1,23 @@
-{% for message in chat.messages %}
+{% set messages_to_read = [] %}
+
+{% for message in chat['messages'] %}
+{% if message['is_read'] %}
 <div class="message">
+{% elif current_user.id != message['sender']['id'] %}
+{% set a = messages_to_read.append(message) %}
+<div class="message">
+{% else %}
+<div class="message unread">
+{% endif %}
   <p>{{ message['text'] }}. Отправитель: {{ message['sender']['username'] }}.
     Время отправки: {{ message['sent_time'].split(' ')[1] }}</p>
 </div>
 {% endfor %}
 <div class="current-message">
-  <input class="input-mess" type="text" />
-  <button class="send-button">Send</button>
+  <input class="input-mess" autofocus type="text" onkeypress="handleFieldPress(event)"/>
+  <button class="send-button" onclick="sendMessage({{ chat['id'] }})">Send</button>
 </div>
+<script src="{{ url_for('static', filename='js/chat_interaction.js') }}"></script>
+{% for message in messages_to_read %}
+<script>readMessage({{ chat['id'] }}, {{ message['id'] }});</script>
+{% endfor %}

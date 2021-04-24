@@ -92,7 +92,8 @@ class MessageListResource(Resource):
             abort(400, message=f'Empty message')
         if args['attachments'] is None:
             args['attachments'] = list()
-        for msg in session.query(Message).filter((Chat.id == chat.id) & (Message.is_read == 0)):
+        for msg in session.query(Message).filter((Chat.id == Message.chat_id) & (Message.is_read == 0) &
+                                                 (Message.sender_id != current_user.id)):
             msg.is_read = True
             session.merge(msg)
             session.commit()
