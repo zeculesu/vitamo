@@ -17,7 +17,9 @@ class Chat(SQLAlchemyBase, SerializerMixin):
     serialize_fields = ('id', 'title', 'logo',
                         'users.id', 'users.username',
                         'users.chats.id', 'users.chats.title', 'users.chats.logo',
-                        'messages.id', 'messages.sender', 'messages.text')
+                        'messages.id',
+                        'messages.sender.id', 'messages.sender.username', 'messages.sender.logo',
+                        'messages.text', 'messages.sent_time')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     title = Column(String, nullable=True)

@@ -96,9 +96,7 @@ class MessageListResource(Resource):
             msg.is_read = True
             session.merge(msg)
             session.commit()
-        args['chat_id'] = chat_id
-        args['sender'] = current_user.id
-        message = Message(**args)
+        message = Message(chat_id=chat_id, sender_id=current_user.id, **args)
         message.viewable_for = chat.users[:]
         session.add(message)
         session.commit()

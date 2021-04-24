@@ -1,8 +1,7 @@
 {% for message in chat.messages %}
 <div class="message">
-  <p>{{ message['text'] }}</p>
-  <p>{{ message['sender']['username'] }}</p>
-  <p>{{ message['sent'] }}</p>
+  <p>{{ message['text'] }}. Отправитель: {{ message['sender']['username'] }}.
+    Время отправки: {{ message['sent_time'].split(' ')[1] }}</p>
 </div>
 {% endfor %}
 <div class="current-message">

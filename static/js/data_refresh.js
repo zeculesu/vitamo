@@ -14,4 +14,5 @@ eventSource.addEventListener("new-message", function(event) {
         elem.setAttribute('onclick', `openChat(${chat['id']})`);
         chat_list.insertAdjacentElement('beforeend', elem);
     };
+    openChat();
     });
