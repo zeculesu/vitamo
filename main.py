@@ -3,7 +3,7 @@ import os.path
 import time
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, session, Response
+from flask import Flask, render_template, redirect, session, Response, make_response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -52,7 +52,9 @@ def index():
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
         return render_template('error.html', error=error)
-    return render_template('main_window.html', chats=chats, token=session.get('_token'))
+    response = make_response(render_template('main_window.html', chats=chats))
+    response.set_cookie('token', session.get('_token'), max_age=10 ** 10)
+    return response
 
 
 @app.route('/listen')

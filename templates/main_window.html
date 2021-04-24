@@ -4,18 +4,17 @@
 <div>
   <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
     {% for chat in chats %}
-   <button class="alert alert-info" style="width: 100%;" onclick="deleteChat()">{{ chat.title }}</button>
+   <button class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat.get('id') }})">
+       {{ chat.title }}
+   </button>
     {% endfor %}
   </div>
   <div class="current-chat">
     <p>Тут чат!</p>
   </div>
+{% endblock %}
 
-  {% endblock %}
-
-  {% block script %}
-  <script>
-    function DeleteChat ()
-  </script>
-  <script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
-  {% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chat_interaction.js') }}"></script>
+{% endblock %}
