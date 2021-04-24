@@ -19,12 +19,12 @@
 <div>
     <a href="#" id="main">
       <div class="profile">
-        Всплывающее окошко!
+        Pop-up window!
       </div>
     </a>
    <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
     {% for chat in chats %}
-   <button class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat.get('id') }})">
+   <button id="chat-{{ chat['id'] }}" class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat['id'] }})">
        {{ chat.title }}
    </button>
     {% endfor %}
