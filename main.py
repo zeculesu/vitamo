@@ -115,7 +115,10 @@ def authorization():
             session['_token'] = token
             login_user(user, remember=login_form.keep_signed.data)
             session.permanent = login_form.keep_signed.data
-            return redirect('/')
+            response = make_response(redirect('/'))
+            response.delete_cookie('token')
+            response.delete_cookie('opened')
+            return response
         elif request.form['submit'] == 'sign up':
             message = add_new_users(register_form.username.data, register_form.email.data,
                                     register_form.password.data)

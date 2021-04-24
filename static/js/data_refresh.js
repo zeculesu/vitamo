@@ -7,6 +7,7 @@ eventSource.addEventListener("new-message", function(event) {
     };
     for (let chat of data) {
         elem = document.createElement('button');
+        elem.id = `chat-${chat['id']}`;
         elem.className = 'alert alert-info';
         elem.innerText = chat['title'];
         elem.style = 'width: 100%;';
