@@ -105,9 +105,7 @@ class ChatListResource(Resource):
         users = [str(current_user.id)] + [user for user in args.pop('users').split(',')
                                           if user != str(current_user.id)]
         chat = Chat(**args)
-        session.add(chat)
-        session.commit()
         chat.users = [handle_user_id(user_id, session) for user_id in users]
-        session.merge(chat)
+        session.add(chat)
         session.commit()
         return jsonify({'message': 'OK'})

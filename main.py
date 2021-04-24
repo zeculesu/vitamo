@@ -1,7 +1,6 @@
 import json
 import os.path
 import time
-from datetime import timedelta
 
 from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, session, Response
@@ -25,7 +24,6 @@ app = Flask(__name__, template_folder='./templates')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['JWT_EXPIRES'] = timedelta(days=365)
 app.config['JWT_IDENTITY_CLAIM'] = 'user'
 app.config['JWT_HEADER_NAME'] = 'authorization'
 app.jwt = JWTManager(app)

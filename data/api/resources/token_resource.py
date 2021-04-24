@@ -5,7 +5,7 @@ from flask_restful import Resource, abort
 from ... import db_session
 from ..parsers.token import TokenGetParser
 from ...models.users import User
-from ..utils import get_current_user
+
 
 class TokenResource(Resource):
     @staticmethod
@@ -18,11 +18,4 @@ class TokenResource(Resource):
             abort(404, message=f'User with username {args["username"]} not found')
         if not user.check_password(args['password']):
             abort(400, message=f'Invalid username or password')
-        return jsonify({'token': create_access_token(identity=user.id)})
-
-
-class TokenRefreshResource(Resource):
-    @staticmethod
-    def get():
-        parser = TokenRefreshParser()
-        args = parser.parse_args()
+        return jsonify({'token': create_access_token(identity=user.id, expires_delta=False)})
