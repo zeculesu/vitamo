@@ -16,10 +16,12 @@
 </header>
 <div>
    <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
-    <a class="btn btn-success" href="/add_chat">Add a chat</a>
+    <a class="btn btn-success" style="background: #eec111; border:2px #eec111  solid;" href="/add_chat">Add a chat</a>
     {% for chat in chats %}
-   <button id="chat-{{ chat['id'] }}" class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat['id'] }})">
+   <button id="chat-{{ chat['id'] }}" class="alert alert-info mb-0" style="width: 100%;margin-bottom: 3px;"
+           onclick="openChat({{ chat['id'] }})">
        {{ chat.title }}
+     <button class="delete-edit">Delete</button><button class="delete-edit">Edit</button>
    </button>
     {% endfor %}
   </div>
