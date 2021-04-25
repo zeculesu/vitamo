@@ -92,9 +92,10 @@ class ChatListResource(Resource):
     @staticmethod
     def get():
         session = db_session.create_session()
-        get_current_user(TokenParser().parse_args()['token'], session)
+        current_user = get_current_user(TokenParser().parse_args()['token'], session)
         chats = session.query(Chat).all()
-        return jsonify({'chats': [ch.to_dict() for ch in chats]})
+        return jsonify({'chats': [ch.to_dict() for ch in chats if current_user.id in
+                                  [user.id for user in ch.users]]})
 
     @staticmethod
     def post():
