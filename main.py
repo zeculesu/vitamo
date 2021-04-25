@@ -2,7 +2,7 @@ import json
 import os.path
 import time
 
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, session, Response, make_response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
@@ -19,11 +19,11 @@ from data.models.users import User
 from utils import assert_sorted_data
 from work_api import *
 
-load_dotenv()
+# load_dotenv()
 app = Flask(__name__, template_folder='./templates')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = 'ruslanloh'
 app.config['JSON_AS_ASCII'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = 'ruslanloh'
 app.config['JWT_IDENTITY_CLAIM'] = 'user'
 app.config['JWT_HEADER_NAME'] = 'authorization'
 app.jwt = JWTManager(app)
