@@ -84,7 +84,7 @@ def listen():
                 rest_chats = chats[:]
                 yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
             yield 'event: online\n\n'
-            time.sleep(2.5)
+            # time.sleep(2.5)
 
     return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
