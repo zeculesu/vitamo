@@ -5,7 +5,8 @@ from utils import get_response_json
 
 
 def add_new_users(user_name, email, password):
-    basic_url = 'http://127.0.0.1:5000/api/users'
+    basic_url = f'{request.host_url}api/users'
+
     response = get_response_json(requests.post(basic_url, data={'username': user_name,
                                                                 'email': email,
                                                                 'password': password}))
