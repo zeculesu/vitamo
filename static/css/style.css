@@ -225,6 +225,7 @@ a:hover,a:focus{
     align-items: flex-end;
     max-height: 90%;
     float: right;
+    margin-top: 10px;
     padding: 3px 18px;
     background: #ebebeb;
 }
@@ -252,7 +253,7 @@ a:hover,a:focus{
     display: flex;
     padding: 3px 18px;
     margin-top: 5px;
-    margin-left: 5px;
+    margin-left: 18px;
     margin-right: auto;
     border-radius: 10px;
     border:2px #2f0b45  solid;
@@ -262,4 +263,5 @@ a:hover,a:focus{
 }
 .self {
     float: right;
+    margin-right: 18px;
 }

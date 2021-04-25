@@ -17,7 +17,7 @@ function setCookie(name, value) {
     return parseCookies();
 };
 
-function openChat(chat_id = null) {
+function openChat(chat_id = null, with_input = true) {
     cookies = parseCookies();
     if (!cookies['opened']) {
         cookies = setCookie('opened', chat_id);
@@ -39,8 +39,9 @@ function openChat(chat_id = null) {
     if (cookies['opened']) {
         $.ajax({
             type: "GET",
-            url: `/chat/${cookies['opened']}`,
+            url: `/chat/${cookies['opened']}?with_input=${with_input}`,
             success: function (chat_data) {
+                console.log(chat_data);
                 document.getElementById("current-chat").innerHTML = chat_data;
                 document.getElementsByClassName('input-mess')[0].focus();
             }

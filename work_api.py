@@ -50,4 +50,4 @@ def get_chat(chat_id, token):
 #     response = get_response_json(requests.put(url, data={'is_read': True, 'token': token}))
 #     if response.get('message') is not None:
 #         return response['message']
-#     return True
+#     return Trueя

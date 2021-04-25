@@ -64,7 +64,7 @@ def show_chat(chat_id):
     chat, error = get_chat(chat_id, session.get('_token'))
     if error:
         return render_template('error.html', error=error)
-    return render_template('chat.html', chat=chat)
+    return render_template('chat.html', chat=chat, with_input=request.args.get("with_input"))
 
 
 @app.route('/listen')
