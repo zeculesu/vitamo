@@ -52,7 +52,7 @@ function sendMessage (chat_id) {
     cookies = parseCookies();
     var token = cookies['token'];
     if (!token) {
-        return 'no token in cookies';
+        alert('There is no API token in cookies');
     };
     var input_field = document.getElementsByClassName('input-mess')[0];
     $.ajax({
@@ -62,6 +62,9 @@ function sendMessage (chat_id) {
         success: function (chat_data) {
             input_field.value = '';
             openChat(chat_id);
+        },
+        error: function () {
+            alert('Failed to send the message :(');
         }
     });
 };
@@ -70,10 +73,17 @@ function readMessage (chat_id, message_id) {
     cookies = parseCookies();
     var token = cookies['token'];
     if (!token) {
-        alert('no token in cookies');
+        alert('There is no API token in cookies');
     };
-    alert(`chat_id: ${chat_id}, message_id: ${message_id}`)
-}
+    $.ajax({
+        type: 'PUT',
+        url: `/api/chats/${chat_id}/messages/${message_id}`,
+        data: `token=${token}&is_read=1`,
+        success: function (chat_data) {
+            openChat(chat_id);
+        }
+    });
+};
 
 function handleFieldPress (event) {
     if (event.key == 'Enter') {

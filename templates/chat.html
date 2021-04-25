@@ -1,14 +1,16 @@
-{% set messages_to_read = [] %}
+{% set class_name = 'message' %}
+{% set signature = '' %}
 
 {% for message in chat['messages'] %}
-{% if message['is_read'] %}
-<div class="message">
-{% elif current_user.id != message['sender']['id'] %}
-{% set a = messages_to_read.append(message) %}
-<div class="message">
-{% else %}
-<div class="message unread">
+{% if not message['is_read'] %}
+{% set class_name = 'message unread' %}
 {% endif %}
+{% if current_user.id != message['sender']['id'] %}
+{% set signature = 'onmousedown=readMessage(%d,%d)' % (chat['id'], message['id']) %}
+{% else %}
+{% set class_name = class_name + ' self' %}
+{% endif %}
+<div class="{{ class_name }}" {{ signature }}>
   <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small><br> {{ message['text'] }}</p>
   <br>
 </div>
@@ -17,7 +19,3 @@
   <input class="input-mess" autofocus type="text" onkeypress="handleFieldPress(event)"/>
   <button class="send-button" onclick="sendMessage({{ chat['id'] }})">Send</button>
 </div>
-<script src="{{ url_for('static', filename='js/chat_interaction.js') }}"></script>
-{% for message in messages_to_read %}
-<script>readMessage({{ chat['id'] }}, {{ message['id'] }});</script>
-{% endfor %}

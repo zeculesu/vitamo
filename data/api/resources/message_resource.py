@@ -16,11 +16,6 @@ class MessageResource(Resource):
         current_user = get_current_user(TokenParser().parse_args()['token'], session)
         handle_chat_id(chat_id, session)
         message = handle_message_id(message_id, session)
-        print(f'message.chat: {message.chat}')
-        print('\n'.join([f'message.chat_id: {message.chat.id}',
-                         f'chat_id: {chat_id}',
-                         f'current_user.id: {current_user.id}',
-                         f'message.viewable_for: {[user.id for user in message.viewable_for]}']))
         if message.chat.id != chat_id or current_user.id not in [user.id for user in
                                                                  message.viewable_for]:
             abort(403, message='You have no access to this Message')
@@ -32,15 +27,22 @@ class MessageResource(Resource):
         message = handle_message_id(message_id, session)
         current_user = get_current_user(TokenParser().parse_args()['token'], session)
         handle_chat_id(chat_id, session)
-        if chat_id not in [ch.id for ch in current_user.chats]:
-            abort(403, message='You have no access to this Chat')
-        if (current_user.id != message.sender or current_user.id
-                not in [user.id for user in message.viewable_for]):
-            abort(403, message='You have no access to this Message')
         parser = MessagePutParser()
         args = parser.parse_args()
-        if args['chat_id'] is not None:
-            args.pop('chat_id')
+        user_chats = [ch.id for ch in current_user.chats]
+        viewable_for = [user.id for user in message.viewable_for]
+        # Далее рассматривается случай, при котором собеседник может прочитать сообщение
+        if (args.get('is_read') is not None and len(list(filter(lambda x: x[1] is not None, args.items()))) == 1
+                and chat_id in user_chats and current_user.id in viewable_for):
+            message.is_read = args['is_read']
+            session.merge(message)
+            session.commit()
+        else:
+            if chat_id not in user_chats:
+                abort(403, message='You have no access to this Chat')
+            if (current_user.id != message.sender or current_user.id
+                    not in viewable_for):
+                abort(403, message='You have no access to this Message')
         if args['attachments'] is not None:
             args['attachments'] = [handle_attachment_id(attach_id) for attach_id
                                    in args['attachments'].split(',')]
@@ -60,7 +62,7 @@ class MessageResource(Resource):
         handle_chat_id(chat_id, session)
         if chat_id not in [ch.id for ch in current_user.chats]:
             abort(403, message='You have no access to this Chat')
-        if (current_user.id != message.sender or current_user.id
+        if (current_user.id != message.sender.id or current_user.id
                 not in [user.id for user in message.viewable_for]):
             abort(403, message='You have no access to this Message')
         session.delete(message)

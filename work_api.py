@@ -43,3 +43,11 @@ def get_chat(chat_id, token):
     if response.get('message') is not None:
         return None, response['message']
     return response.get('chat'), None
+
+
+# def read_message(chat_id, message_id, token):
+#     url = f'{request.host_url}api/chats/{chat_id}/messages/{message_id}'
+#     response = get_response_json(requests.put(url, data={'is_read': True, 'token': token}))
+#     if response.get('message') is not None:
+#         return response['message']
+#     return True
