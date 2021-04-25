@@ -213,7 +213,6 @@ a:hover,a:focus{
     background: #ebebeb;
     height: 90vh;
     text-align: center;
-    overflow-y: scroll;
     color: black;
 }
 .current-message {
@@ -255,6 +254,9 @@ a:hover,a:focus{
     margin-right: auto;
     border-radius: 10px;
     border:2px #2f0b45  solid;
+}
+.messages {
+    overflow-y: scroll;
 }
 .unread {
     background: #d9edf7;
