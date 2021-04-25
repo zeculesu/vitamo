@@ -3,7 +3,7 @@ import os.path
 import time
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, session, Response, make_response
+from flask import Flask, render_template, redirect, session, Response, make_response, url_for
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -14,9 +14,10 @@ from data.api.resources.message_resource import MessageResource, MessageListReso
 from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
 from data.api.utils import get_current_user
+from data.forms.chats import ChatAddForm
 from data.forms.users import LoginForm, RegisterForm
 from data.models.users import User
-from utils import assert_sorted_data
+from utils import assert_sorted_data, generate_random_name
 from work_api import *
 
 load_dotenv()
@@ -65,6 +66,28 @@ def show_chat(chat_id):
     if error:
         return render_template('error.html', error=error)
     return render_template('chat.html', chat=chat)
+
+
+@app.route('/add_chat', methods=['GET', 'POST'])
+def add_chat():
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
+    form = ChatAddForm()
+    if form.is_submitted():
+        title = form.title.data
+        members = form.users.data
+        if form.logo.data:
+            mimetype = form.img.data.mimetype.split('/')[-1]
+            img_folder = url_for('static', filename='img').rstrip('/')
+            existing_names = [x.split('.')[0] for x in os.listdir(img_folder)]
+            form.img.data.save(os.path.join(img_folder, '%d.%s' % (generate_random_name(existing_names),
+                                                                   mimetype)))
+    users, message = get_users(session.get('_token'))
+    if message:
+        return render_template('error.html', error=message), 400
+    form.users.choices = [(user.get("id"), user.get("username")) for user in users
+                          if user.get('id') != current_user.id]
+    return render_template('add_chat.html', form=form)
 
 
 @app.route('/listen')

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.title.label }}
+        {{ form.title(class="form-control", placeholder="Enter title") }}
+    </p>
+    <p>
+        {{ form.users.label }}
+        {{ form.users(class="form-control") }}
+    </p>
+    <p>
+        {{ form.logo.label }}
+        {{ form.logo(class="form-control") }}
+    </p>
+    <p>
+        {{ form.submit(class="btn btn-success") }}
+    </p>
+</form>
+{% endblock %}

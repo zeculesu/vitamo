@@ -17,9 +17,14 @@
   <a class='a1' href="/">Chats</a>
 </header>
 <div class="card">
-  <img src="{{ url_for('static', filename='logo.png') }}" class='logo'>
+  {% if not current_user.logo %}
+  {% set source = url_for('static', filename='img/logo.png') %}
+  {% else %}
+  {% set source = url_for('static', filename='img/%s') % current_user.logo %}
+  {% endif %}
+  <img src="{{ source }}" alt="Руслан лох" class='logo'>
   <h1>{{ current_user.username }}</h1>
-   <h4 class="title_profile"> <small style="color: #ebebeb">Email:</small>  {{ current_user.email }} </h4>
+  <h4 class="title_profile"> <small style="color: #ebebeb">Email:</small>  {{ current_user.email }} </h4>
   <h4 class="title_profile"> <small  style="color: #ebebeb">Description:</small>  {{ current_user.description }} </h4>
   <a class='a2' href="/auth">Logout</a>
 </div>

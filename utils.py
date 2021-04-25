@@ -1,4 +1,6 @@
 from json import JSONDecodeError
+from random import choice
+
 from flask_jwt_extended import decode_token
 
 
@@ -18,3 +20,12 @@ def assert_sorted_data(source, data=None):
     if data is None:
         return source
     return data if [sorted(list(x.items()), key=lambda x: x[0]) for x in data] != source else None
+
+
+def generate_random_name(existing_names, length=15):
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    chars = [str(i) for i in range(10)] + list(alphabet) + list(alphabet.upper())
+    output = None
+    while output in existing_names or output is None:
+        output = ''.join([choice(chars) for _ in range(length)])
+    return output

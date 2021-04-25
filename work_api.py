@@ -27,6 +27,16 @@ def authorize_user(login, password):
     return response['token'], None
 
 
+def get_users(token):
+    basic_url = f'{request.host_url}api/users'
+    response = get_response_json(requests.get(basic_url, data={'token': token}))
+    if not response:
+        return None, 'Not Found error'
+    if response.get('users') is None:
+        return None, response.get('message', 'Unknown error')
+    return response['users'], None
+
+
 def get_chats(token, host_url=None):
     host_url = host_url if host_url is not None else request.host_url
     url = f'{host_url}api/chats'

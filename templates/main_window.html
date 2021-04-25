@@ -13,10 +13,10 @@
 <header>
   <div class="title"><label>Vitamo</label></div>
   <a class="a1" href="/profile">Profile</a>
-  <a class="a1" href="/auth" style="left: 0px;">{{ current_user.username }} [Logout]</a>
 </header>
 <div>
    <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
+    <a class="btn btn-success" href="/add_chat">Add a chat</a>
     {% for chat in chats %}
    <button id="chat-{{ chat['id'] }}" class="alert alert-info" style="width: 100%;" onclick="openChat({{ chat['id'] }})">
        {{ chat.title }}
