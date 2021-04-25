@@ -31,7 +31,7 @@ header{height: 60px;
     header h1{
         margin-top:5px;
         }
-    a{
+.a1{
     width: 140px;
     height: 60px;
     position: absolute;
@@ -42,15 +42,7 @@ header{height: 60px;
     border: none;
     margin: auto;
     outline: none;
-}
-.a1{
     right: 0px;
-    color: #ebebeb;
-    top: 11px;
-    font-size: 25px;
-    }
-.a2{
-    right: 130px;
     color: #ebebeb;
     top: 11px;
     font-size: 25px;
@@ -270,4 +262,35 @@ a:hover,a:focus{
 .self {
     float: right;
     margin-right: 18px;
+}
+.card {
+    margin: auto;
+    margin-top: 15px;
+    text-align: center;
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(#4527a0,#2f0b45);
+    border-radius: 30px;
+    color: #ebebeb;
+}
+
+.title_profile {
+    color: #ebebeb;
+    font-size: 20px;
+}
+.a2 {
+    text-decoration: none;
+    font-size: 23px;
+    color: #ebebeb;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    max-height: 110px;
+}
+.logo{
+    margin-top: 30px;
+    border-radius: 100px; /* Радиус скругления */
+    border: 3px solid #ebebeb;
+    text-align: center;
 }
