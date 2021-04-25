@@ -1,6 +1,6 @@
 {% set class_name = 'message' %}
 {% set signature = '' %}
-
+<div class="messages">
 {% for message in chat['messages'] %}
 {% if not message['is_read'] %}
 {% set class_name = 'message unread' %}
@@ -16,9 +16,8 @@
   <br>
 </div>
 {% endfor %}
-{% if with_input %}
+</div>
 <div class="current-message">
   <input class="input-mess" autofocus type="text" onkeypress="handleFieldPress(event)"/>
   <button class="send-button" onclick="sendMessage({{ chat['id'] }})">Send</button>
 </div>
-{% endif %}

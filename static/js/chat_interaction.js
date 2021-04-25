@@ -17,6 +17,13 @@ function setCookie(name, value) {
     return parseCookies();
 };
 
+function scrollSmoothToBottom (id) {
+    var div = document.getElementById(id);
+    $('#' + id).animate({
+       scrollTop: div.scrollHeight - div.clientHeight
+    }, 500);
+ };
+
 function openChat(chat_id = null, with_input = true) {
     cookies = parseCookies();
     if (!cookies['opened']) {
@@ -39,10 +46,18 @@ function openChat(chat_id = null, with_input = true) {
     if (cookies['opened']) {
         $.ajax({
             type: "GET",
-            url: `/chat/${cookies['opened']}?with_input=${with_input}`,
+            url: `/chat/${cookies['opened']}`,
             success: function (chat_data) {
-                console.log(chat_data);
-                document.getElementById("current-chat").innerHTML = chat_data;
+                if (with_input) {
+                    document.getElementById('current-chat').innerHTML = chat_data;
+                }
+                else {
+                    var doc = new DOMParser().parseFromString(chat_data, 'text/html');
+                    console.log(doc.getElementsByClassName('messages')[0]);
+                    console.log(document.getElementById('current-chat').getElementsByClassName('messages')[0]);
+                    document.getElementById('current-chat').getElementsByClassName('messages')[0].innerHTML = doc.getElementsByClassName('messages')[0].innerHTML;
+                };
+                scrollSmoothToBottom('current-chat');
                 document.getElementsByClassName('input-mess')[0].focus();
             }
         });
