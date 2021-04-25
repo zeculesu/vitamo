@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<a class='a1' href="/">Chats</a>
+{% endblock %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.title.label }}
+        {{ form.title(class="form-control", placeholder="Enter title") }}
+    </p>
+    <p>
+        {{ form.users.label }}
+        <select class="form-control" id="users"  multiple name="users" required>
+            {% for val, key in form.users.choices %}
+            {% if key in form.users.assigned_choices %}
+            <option value="{{ val }}" selected>{{ key }}</option>
+            {% else %}
+            <option value="{{ val }}">{{ key }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+<!--        {{ form.users(class="form-control") }}-->
+    </p>
+    <p>
+        {{ form.logo.label }}
+        {{ form.logo(class="form-control") }}
+    </p>
+    <p>
+        {{ form.submit(class="btn btn-success", value="{}".format(submit_text)) }}
+    </p>
+</form>
+{% endblock %}

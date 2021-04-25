@@ -67,6 +67,25 @@ def add_chat_api(title, members, logo, token):
     return True
 
 
+def edit_chat_api(chat_id, title, members, logo, token):
+    basic_url = f'{request.host_url}api/chats/{chat_id}'
+
+    response = get_response_json(requests.put(basic_url, data={'title': title,
+                                                               'users': members,
+                                                               'logo': logo,
+                                                               'token': token}))
+    if response.get('message') != 'OK':
+        return response['message']
+    return True
+
+
+def delete_chat_api(chat_id, token):
+    basic_url = f'{request.host_url}api/chats/{chat_id}'
+    response = get_response_json(requests.delete(basic_url, data={'token': token}))
+    if response.get('message') != 'OK':
+        return response['message']
+    return True
+
 # def read_message(chat_id, message_id, token):
 #     url = f'{request.host_url}api/chats/{chat_id}/messages/{message_id}'
 #     response = get_response_json(requests.put(url, data={'is_read': True, 'token': token}))

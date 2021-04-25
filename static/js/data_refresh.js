@@ -11,6 +11,9 @@ eventSource.addEventListener("new-message", function(event) {
         };
     };
     for (let chat of data) {
+        if (document.getElementById(`chat-${chat['id']}`)) {
+            continue;
+        };
         elem = document.createElement('button');
         elem.id = `chat-${chat['id']}`;
         elem.className = 'alert alert-info';

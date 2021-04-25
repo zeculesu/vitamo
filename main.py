@@ -1,3 +1,4 @@
+import io
 import json
 import os.path
 import time
@@ -14,10 +15,10 @@ from data.api.resources.message_resource import MessageResource, MessageListReso
 from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
 from data.api.utils import get_current_user
-from data.forms.chats import ChatAddForm
+from data.forms.chats import ChatForm
 from data.forms.users import LoginForm, RegisterForm
 from data.models.users import User
-from utils import assert_sorted_data, generate_random_name
+from utils import assert_sorted_data, generate_random_name, process_chat_form_data
 from work_api import *
 
 load_dotenv()
@@ -72,17 +73,9 @@ def show_chat(chat_id):
 def add_chat():
     if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
         return redirect('/auth')
-    form = ChatAddForm()
+    form = ChatForm()
     if form.is_submitted():
-        title = form.title.data
-        members = ','.join(form.users.data)
-        logo = request.files.get('logo')
-        if logo:
-            mimetype = logo.mimetype.split('/')[-1]
-            img_folder = url_for('static', filename='img').lstrip('/')
-            existing_names = [x.split('.')[0] for x in os.listdir(img_folder)]
-            filename = generate_random_name(existing_names)
-            logo.save(os.path.join(img_folder, f'{filename}.{mimetype}'))
+        title, members, logo = process_chat_form_data(form, request)
         message = add_chat_api(title, members, logo, session.get('_token'))
         if isinstance(message, str):
             return render_template('error.html', error=message)
@@ -92,7 +85,37 @@ def add_chat():
         return render_template('error.html', error=message), 400
     form.users.choices = [(user.get("id"), user.get("username")) for user in users
                           if user.get('id') != current_user.id]
-    return render_template('add_chat.html', form=form)
+    return render_template('chat_form.html', form=form, submit_text='Add')
+
+
+@app.route('/edit_chat/<int:chat_id>', methods=['GET', 'POST'])
+def edit_chat(chat_id):
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
+    form = ChatForm()
+    if form.is_submitted():
+        title, members, logo = process_chat_form_data(form, request)
+        print('dlsalda: {}'.format([str(current_user.id)] + members.split(',')))
+        members = ','.join([str(current_user.id)] + members.split(','))
+        print(f'members: {members}')
+        message = edit_chat_api(chat_id, title, members, logo, session.get('_token'))
+        if isinstance(message, str):
+            return render_template('error.html', error=message), 400
+        return redirect('/')
+    chat, message = get_chat(chat_id, session.get('_token'))
+    if message:
+        return render_template('error.html', error=message), 400
+    users, message = get_users(session.get('_token'))
+    if message:
+        return render_template('error.html', error=message), 400
+    form.title.data = chat.get('title')
+    form.users.choices = [(user.get("id"), user.get("username")) for user in users
+                          if user.get('id') != current_user.id]
+    form.users.assigned_choices = [user.get("username") for user in chat.get('users', [])
+                                   if user.get('id') != current_user.id]
+    if chat.get('logo'):
+        form.logo.file.filename = chat['logo']
+    return render_template('chat_form.html', form=form, submit_text='Edit')
 
 
 @app.route('/listen')

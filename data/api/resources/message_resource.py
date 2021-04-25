@@ -40,10 +40,6 @@ class MessageResource(Resource):
         else:
             if chat_id not in user_chats:
                 abort(403, message='You have no access to this Chat')
-            print('\n'.join([f'current_user.id: {current_user.id}',
-                             f'message.sender.id: {message.sender.id}',
-                             f'[user.id for user in message.viewable_for]: '
-                             f'{[user.id for user in message.viewable_for]}']))
             if (current_user.id != message.sender.id or current_user.id
                     not in [user for user in viewable_for]):
                 abort(403, message='You have no access to this Message')

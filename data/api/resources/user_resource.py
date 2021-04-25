@@ -30,7 +30,7 @@ class UserResource(Resource):
         if args.get('password') is not None:
             user.set_password(args.pop('password'))
         chars = 20
-        if len(args.get('username'), 0) > chars:
+        if len(args.get('username', 0)) > chars:
             abort(400, message=f'Too long username. Its length must be under {chars} chars')
         for key, val in filter(lambda x: x[1] is not None, args.items()):
             setattr(user, key, val)
