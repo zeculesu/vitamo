@@ -49,6 +49,12 @@ header{height: 60px;
     top: 11px;
     font-size: 25px;
     }
+.a2{
+    right: 130px;
+    color: #ebebeb;
+    top: 11px;
+    font-size: 25px;
+    }
 a:hover,a:focus{
     outline: none;
     text-decoration: none;
