@@ -46,13 +46,10 @@ header{height: 60px;
 .a1{
     right: 0px;
     color: #ebebeb;
-    top: 11px;
-    font-size: 25px;
     }
 a:hover,a:focus{
     outline: none;
     text-decoration: none;
-    color: #eec111;
 }
 .tab{
     margin-top: 25px;
@@ -219,14 +216,16 @@ a:hover,a:focus{
     color: black;
 }
 .current-message {
-    width: 100%;
+    position: absolute;
+    width: 64%;
     background: #ebebeb;
     display: flex;
     align-items: flex-end;
-    max-height: 90%;
+    max-height: 100%;
     float: right;
     padding: 3px 18px;
     background: #ebebeb;
+    bottom: 0;
 }
 .send-button{
     background: #2f0b45;

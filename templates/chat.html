@@ -9,8 +9,8 @@
 {% else %}
 <div class="message unread">
 {% endif %}
-  <p>{{ message['text'] }}. Отправитель: {{ message['sender']['username'] }}.
-    Время отправки: {{ message['sent_time'].split(' ')[1] }}</p>
+  <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small><br> {{ message['text'] }}</p>
+  <br>
 </div>
 {% endfor %}
 <div class="current-message">
