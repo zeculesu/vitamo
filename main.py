@@ -2,7 +2,7 @@ import json
 import os.path
 import time
 
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, session, Response, make_response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
@@ -19,11 +19,11 @@ from data.models.users import User
 from utils import assert_sorted_data
 from work_api import *
 
-# load_dotenv()
+load_dotenv()
 app = Flask(__name__, template_folder='./templates')
-app.config['SECRET_KEY'] = 'ruslanloh'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['JSON_AS_ASCII'] = False
-app.config['JWT_SECRET_KEY'] = 'ruslanloh'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_IDENTITY_CLAIM'] = 'user'
 app.config['JWT_HEADER_NAME'] = 'authorization'
 app.jwt = JWTManager(app)
@@ -84,7 +84,7 @@ def listen():
                 rest_chats = chats[:]
                 yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
             yield 'event: online\n\n'
-            # time.sleep(2.5)
+            time.sleep(2.5)
 
     return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
@@ -138,6 +138,6 @@ def profile():
 
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
-    # app.run()
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run()
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
