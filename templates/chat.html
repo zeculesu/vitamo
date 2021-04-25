@@ -12,7 +12,11 @@
 {% set class_name = class_name + ' self' %}
 {% endif %}
 <div class="{{ class_name }}" {{ signature }}>
-  <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small><br> {{ message['text'] }}</p>
+  <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
+  <br> {{ message['text'] }}</p>
+  {% if message['is_edited'] %}
+  <br> <small>{{ (edited) }}</small>
+  {% endif %}
   <br>
 </div>
 {% endfor %}

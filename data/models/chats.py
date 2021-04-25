@@ -2,8 +2,6 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Table
 from sqlalchemy.orm import relation
 from sqlalchemy_serializer import SerializerMixin
 
-from .messages import Message
-from .users import User
 from ..db_session import SQLAlchemyBase
 
 messages_to_chat = Table('messages_to_chat', SQLAlchemyBase.metadata,
@@ -19,7 +17,7 @@ class Chat(SQLAlchemyBase, SerializerMixin):
                         'users.chats.id', 'users.chats.title', 'users.chats.logo',
                         'messages.id',
                         'messages.sender.id', 'messages.sender.username', 'messages.sender.logo',
-                        'messages.text', 'messages.is_read', 'messages.sent_time')
+                        'messages.text', 'messages.is_read', 'messages.is_edited', 'messages.sent_time')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     title = Column(String, nullable=True)

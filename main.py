@@ -75,13 +75,18 @@ def add_chat():
     form = ChatAddForm()
     if form.is_submitted():
         title = form.title.data
-        members = form.users.data
-        if form.logo.data:
-            mimetype = form.img.data.mimetype.split('/')[-1]
-            img_folder = url_for('static', filename='img').rstrip('/')
+        members = ','.join(form.users.data)
+        logo = request.files.get('logo')
+        if logo:
+            mimetype = logo.mimetype.split('/')[-1]
+            img_folder = url_for('static', filename='img').lstrip('/')
             existing_names = [x.split('.')[0] for x in os.listdir(img_folder)]
-            form.img.data.save(os.path.join(img_folder, '%d.%s' % (generate_random_name(existing_names),
-                                                                   mimetype)))
+            filename = generate_random_name(existing_names)
+            logo.save(os.path.join(img_folder, f'{filename}.{mimetype}'))
+        message = add_chat_api(title, members, logo, session.get('_token'))
+        if isinstance(message, str):
+            return render_template('error.html', error=message)
+        return redirect('/')
     users, message = get_users(session.get('_token'))
     if message:
         return render_template('error.html', error=message), 400
