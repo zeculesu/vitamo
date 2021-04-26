@@ -247,12 +247,13 @@ a:hover,a:focus{
     clear: both;
     overflow: hidden;
     min-width: 200px;
-    max-width: 1000px;
+    max-width: 760px;
+    height:100%;
     background: #fff7ff;
     display: flex;
     padding: 3px 18px;
     margin-top: 5px;
-    margin-left: 18px;
+    margin-left: 5px;
     margin-right: auto;
     border-radius: 10px;
     border:2px #2f0b45  solid;
@@ -305,6 +306,6 @@ a:hover,a:focus{
     border-radius: 5px;
     border: none;
     color: white;
-    text-align: center  ;
+    text-align: center;
     font-size: 15px;
 }

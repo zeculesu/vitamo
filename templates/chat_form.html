@@ -5,15 +5,16 @@
 {% endblock %}
 
 {% block content %}
-<form action="" method="post" enctype="multipart/form-data">
+<div class="card" style="height: 369px;">
+<form action="" method="post" enctype="multipart/form-data" style="padding: 20px;">
     {{ form.hidden_tag() }}
     <p>
-        {{ form.title.label }}
-        {{ form.title(class="form-control", placeholder="Enter title") }}
+        {{ form.title.label(style="color: #ebebeb;") }}
+        {{ form.title(class="form-control", style="widht: 80%", placeholder="Enter title") }}
     </p>
     <p>
-        {{ form.users.label }}
-        <select class="form-control" id="users"  multiple name="users" required>
+        {{ form.users.label(style="color: #ebebeb;") }}
+        <select class="form-control" id="users" style="widht: 80%"  multiple name="users" required>
             {% for val, key in form.users.choices %}
             {% if key in form.users.assigned_choices %}
             <option value="{{ val }}" selected>{{ key }}</option>
@@ -25,11 +26,12 @@
 <!--        {{ form.users(class="form-control") }}-->
     </p>
     <p>
-        {{ form.logo.label }}
+        {{ form.logo.label(style="color: #ebebeb;") }}
         {{ form.logo(class="form-control") }}
     </p>
     <p>
-        {{ form.submit(class="btn btn-success", value="{}".format(submit_text)) }}
+        {{ form.submit(class="btn btn-success", style="background: #eec111; border:2px #eec111  solid;", value="{}".format(submit_text)) }}
     </p>
 </form>
+</div>
 {% endblock %}
