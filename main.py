@@ -4,7 +4,7 @@ import os.path
 import time
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, session, Response, make_response, url_for
+from flask import Flask, render_template, redirect, session, Response, make_response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
