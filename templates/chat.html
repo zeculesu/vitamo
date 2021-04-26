@@ -23,11 +23,11 @@
     {% endif %}
     <div id="message-{{ message['id'] }}" class="{{ class_name }}">
         <div class="content" {{ signature }}>
-            <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
-                <br> {{ message['text'] }}</p>
-            {% if message['is_edited'] %}
-            <br> <small>&nbsp;(edited)</small>
-            {% endif %}
+            <div align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
+                {% if message['is_edited'] %}
+                <small>&nbsp;(edited)</small>
+                {% endif %}
+                <br> <p class="text">{{ message['text'] }}</p></div>
         </div>
     </div>
     {% endif %}

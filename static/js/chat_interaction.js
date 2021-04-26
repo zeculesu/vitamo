@@ -140,7 +140,7 @@ function showMessageContext (chat_id, message_id) {
         var delete_for_self = false;
         var edit_btn = document.createElement('a');
         edit_btn.className = 'edit-delete';
-        edit_btn.href = `javascript:editMessage(${chat_id},${message_id})`;
+        edit_btn.href = `javascript:startEditMessage(${chat_id},${message_id})`;
         edit_btn.innerText = 'Edit';
         message.appendChild(edit_btn);
     }
@@ -187,6 +187,37 @@ function deleteMessage (chat_id, message_id, delete_for_self) {
         }
     });
     closeMessageContext(message_id);
+}
+
+function startEditMessage (chat_id, message_id) {
+    var message = document.getElementById(`message-${message_id}`);
+    var send_btn = document.getElementsByClassName('send-button')[0];
+    var input_field = document.getElementsByClassName('input-mess')[0];
+    input_field.value = message.getElementsByClassName('content')[0].getElementsByTagName('p')[0].innerText;
+    send_btn.setAttribute('onclick', `editMessage(${chat_id}, ${message_id})`);    
+};
+
+function editMessage (chat_id, message_id) {
+    cookies = parseCookies();
+    var token = cookies['token'];
+    if (!token) {
+        alert('There is no API token in cookies');
+    };
+    var input_field = document.getElementsByClassName('input-mess')[0];
+    $.ajax({
+        type: 'PUT',
+        url: `/api/chats/${chat_id}/messages/${message_id}`,
+        data: `token=${token}&text=${input_field.value}`,
+        success: function () {
+            var send_btn = document.getElementsByClassName('send-button')[0];
+            send_btn.setAttribute('onclick', `sendMessage(${chat_id})`);
+            openChat(chat_id);
+        },
+        error: function () {
+            alert('Failed to edit this message :(');
+            window.location.reload();
+        }
+    })
 }
 
 function handleFieldPress (event) {

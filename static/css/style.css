@@ -316,3 +316,7 @@ a:hover,a:focus{
 .active {
     border-color: black;
 }
+.text {
+    margin: 0px;
+    padding-left: 0px;
+}
