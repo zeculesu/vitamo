@@ -1,11 +1,11 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Resource, abort
 
 from ..parsers.base import TokenParser
 from ... import db_session
 from ...models.chats import Chat
 from ...models.messages import Message
-from ..parsers.messages import MessageAddParser, MessagePutParser
+from ..parsers.messages import MessageAddParser, MessagePutParser, MessageDeleteParser
 from ..utils import handle_message_id, handle_attachment_id, handle_chat_id, get_current_user
 
 
@@ -65,7 +65,13 @@ class MessageResource(Resource):
         if (current_user.id != message.sender.id and current_user.id
                 not in [user.id for user in message.viewable_for]):
             abort(403, message='You have no access to this Message')
-        session.delete(message)
+        parser = MessageDeleteParser()
+        args = parser.parse_args()
+        if args['self_only']:
+            message.viewable_for = list(filter(lambda x: x != current_user, message.viewable_for))
+            session.merge(message)
+        else:
+            session.delete(message)
         session.commit()
         return jsonify({'message': 'OK'})
 

@@ -14,7 +14,8 @@ class Message(SQLAlchemyBase, SerializerMixin):
     __tablename__ = 'messages'
 
     serialize_fields = ('id', 'text', 'chat_id',
-                        'sender.id', 'sender.username',
+                        # 'sender.id', 'sender.username',
+                        'viewable_for.id'
                         'attachments', 'is_read', 'is_edited', 'sent_time')
 
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)

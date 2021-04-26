@@ -1,3 +1,4 @@
+setCookie('contexted', '');
 openChat();
 
 function parseCookies() {
@@ -122,6 +123,71 @@ function readMessage (chat_id, message_id) {
         }
     });
 };
+
+function showMessageContext (chat_id, message_id) {
+    cookies = parseCookies();
+    var message = document.getElementById(`message-${message_id}`);
+    var contexted = cookies['contexted'];
+    if (contexted) {
+        closeMessageContext(contexted);
+        if (contexted == message_id) {
+            return;
+        }
+    }
+    cookies = setCookie('contexted', message_id);
+    console.log(`message.className.indexOf('self'): ${message.className.indexOf('self')}`);
+    if (message.className.indexOf('self') >= 0) {
+        var delete_for_self = false;
+        var edit_btn = document.createElement('a');
+        edit_btn.className = 'edit-delete';
+        edit_btn.href = `javascript:editMessage(${chat_id},${message_id})`;
+        edit_btn.innerText = 'Edit';
+        message.appendChild(edit_btn);
+    }
+    else {
+        var delete_for_self = true;
+    };
+    var delete_btn = document.createElement('a');
+    delete_btn.className = 'edit-delete';
+    delete_btn.href = `javascript:deleteMessage(${chat_id},${message_id},${delete_for_self})`;
+    delete_btn.innerText = 'Delete';
+    message.appendChild(delete_btn);
+}
+
+function closeMessageContext (message_id) {
+    var message = document.getElementById(`message-${message_id}`);
+    if (message) {
+        for (let elem of message.getElementsByClassName('delete-edit')) {
+            message.removeChild(elem);
+        };
+    };
+    setCookie('contexted', null);
+    document.location.reload();
+}
+
+function deleteMessage (chat_id, message_id, delete_for_self) {
+    cookies = parseCookies();
+    var token = cookies['token'];
+    if (!token) {
+        alert('There is no API token in cookies');
+    };
+    if (delete_for_self) {
+        var data = `token=${token}&self_only=true`;
+    }
+    else {
+        var data = `token=${token}`;
+    };
+    $.ajax({
+        type: 'DELETE',
+        url: `/api/chats/${chat_id}/messages/${message_id}`,
+        data: data,
+        success: function () {
+            alert(`Message ${message_id} has been successfully deleted`);
+            window.location.reload();
+        }
+    });
+    closeMessageContext(message_id);
+}
 
 function handleFieldPress (event) {
     if (event.key == 'Enter') {

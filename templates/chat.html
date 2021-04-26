@@ -2,8 +2,18 @@
 {% set signature = '' %}
 <div class="messages">
     {% for message in chat['messages'] %}
+    {% set viewable_for = [] %}
+    {% for user in message['viewable_for'] %}
+        {% set appended = viewable_for.append(user['id']) %}
+    {% endfor %}
+    {% if current_user.id in viewable_for %}
     {% if not message['is_read'] %}
+    {% if message['sender']['id'] == current_user.id %}
+    {% set signature = 'onmousedown=showMessageContext(%d,%d)' % (chat['id'], message['id']) %}
+    {% endif %}
     {% set class_name = 'message unread' %}
+    {% else %}
+    {% set signature = 'onmousedown=showMessageContext(%d,%d)' % (chat['id'], message['id']) %}
     {% endif %}
     {% if current_user.id != message['sender']['id'] and not message['is_read'] %}
     {% set signature = 'onmousedown=readMessage(%d,%d)' % (chat['id'], message['id']) %}
@@ -11,14 +21,16 @@
     {% if current_user.id == message['sender']['id'] %}
     {% set class_name = class_name + ' self' %}
     {% endif %}
-    <div class="{{ class_name }}" {{ signature }}>
-        <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
-            <br> {{ message['text'] }}</p>
-        {% if message['is_edited'] %}
-        <br> <small>&nbsp;(edited)</small>
-        {% endif %}
-        <br>
+    <div id="message-{{ message['id'] }}" class="{{ class_name }}">
+        <div class="content" {{ signature }}>
+            <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
+                <br> {{ message['text'] }}</p>
+            {% if message['is_edited'] %}
+            <br> <small>&nbsp;(edited)</small>
+            {% endif %}
+        </div>
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 <div class="current-message">

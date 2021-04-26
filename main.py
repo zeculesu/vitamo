@@ -1,5 +1,6 @@
 import json
 import os.path
+import time
 
 from flask import Flask, render_template, redirect, session, Response, make_response, url_for
 from flask_jwt_extended import JWTManager
@@ -129,7 +130,7 @@ def listen():
                 rest_chats = chats[:]
                 yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
             yield 'event: online\n\n'
-
+            time.sleep(2.5)
     return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
 
@@ -182,5 +183,6 @@ def profile():
 
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run()
+    # port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
