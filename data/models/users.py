@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flask_login import UserMixin
 from sqlalchemy import Column, String, Integer, DateTime, Table, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy_serializer import SerializerMixin
@@ -16,7 +17,7 @@ user_to_user = Table('user_to_user', SQLAlchemyBase.metadata,
                      Column('user2', Integer, ForeignKey('users.id')))
 
 
-class User(SQLAlchemyBase, SerializerMixin):
+class User(SQLAlchemyBase, SerializerMixin, UserMixin):
     __tablename__ = 'users'
 
     serialize_fields = ('id', 'email', 'username',

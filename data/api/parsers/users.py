@@ -7,7 +7,7 @@ class UserAddParser(RequestParser):
         self.add_argument('email', required=True)
         self.add_argument('username', required=True)
         self.add_argument('password', required=True)
-        self.add_argument('description', required=True)
+        self.add_argument('description', required=False)
         self.add_argument('logo', required=False)
 
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    <title>Vitamo</title>
+</head>
+<body>
+<header>
+    <div class="title"><label>Vitamo</label></div>
+    <a class="a1" href="/profile">Profile</a>
+</header>
+<div>
+    <div id="chat-list" style="float: left; width: 20%; background: #ebebeb; text: black;">
+        <a class="btn btn-success" style="background: #eec111; border:2px #eec111  solid;" href="/add_chat">Add a
+            chat</a>
+        {% for chat in chats %}
+        <button id="chat-{{ chat['id'] }}" class="alert alert-info mb-0" style="width: 100%;margin-bottom: 3px;"
+                onclick="openChat({{ chat['id'] }})">
+            {% if not chat['title'] %}
+            {% set users = [] %}
+            {% for user in chat.users %}
+            {% set appended = users.append(user.username) %}
+            {% endfor %}
+            {% set title = users|join(", ") %}
+            {% if len(title) > 25 %}
+            {% set title = title[:22] + "..." %}
+            {% endif %}
+            {{ title }}
+            {% else %}
+            {{ chat['title'] }}
+            {% endif %}
+        </button>
+        {% if chat['users'][0].id == current_user.id %}
+        <a class="delete-edit" href="javascript:deleteChat({{ chat['id'] }})">Delete</a>
+        <a class="delete-edit" href="/edit_chat/{{ chat['id'] }}">Edit</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div id="current-chat">
+        <p>Тут чат!</p>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chat_interaction.js') }}"></script>
+</body>
+</html>

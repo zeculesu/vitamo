@@ -1,0 +1,27 @@
+{% set class_name = 'message' %}
+{% set signature = '' %}
+<div class="messages">
+    {% for message in chat['messages'] %}
+    {% if not message['is_read'] %}
+    {% set class_name = 'message unread' %}
+    {% endif %}
+    {% if current_user.id != message['sender']['id'] and not message['is_read'] %}
+    {% set signature = 'onmousedown=readMessage(%d,%d)' % (chat['id'], message['id']) %}
+    {% endif %}
+    {% if current_user.id == message['sender']['id'] %}
+    {% set class_name = class_name + ' self' %}
+    {% endif %}
+    <div class="{{ class_name }}" {{ signature }}>
+        <p align="left"><small>{{ message['sender']['username'] }} ({{ message['sent_time'].split(' ')[1] }}) </small>
+            <br> {{ message['text'] }}</p>
+        {% if message['is_edited'] %}
+        <br> <small>&nbsp;(edited)</small>
+        {% endif %}
+        <br>
+    </div>
+    {% endfor %}
+</div>
+<div class="current-message">
+    <input class="input-mess" autofocus type="text" onkeypress="handleFieldPress(event)"/>
+    <button class="send-button" onclick="sendMessage({{ chat['id'] }})">Send</button>
+</div>

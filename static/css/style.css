@@ -1,0 +1,318 @@
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+body{
+    width:80%;
+    margin:30px auto;
+    background-color: #d1c4e9;
+    padding-top:30px;
+    color: #ebebeb;
+    font-size: 20px;
+    height: 100%;
+}
+p{
+    color: #000000
+}
+.title{
+    font-size: 36px;
+    padding-top: 6px;
+    text-align: center;
+    text-transform: capitalize;
+    }
+header{height: 60px;
+    width: 80%;
+    top:0;
+    border-radius: 10px;
+    z-index:1000;
+    background: linear-gradient(to top,#4527a0 10%, #2f0b45 90%);
+    text-align: center;
+    position: fixed;}
+    header h1,header h2, header h3{
+        font-family: Arial, Helvetica, sans-serif; color:#ebebeb;
+        font-size: 100px;
+        }
+    header h1{
+        margin-top:5px;
+        }
+.a1{
+    width: 140px;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    outline: none;
+    background-color: linear-gradient(to top,#4527a0 10%, #2f0b45 90%);
+    border-radius: 5px;
+    border: none;
+    margin: auto;
+    outline: none;
+    right: 0px;
+    color: #ebebeb;
+    top: 11px;
+    font-size: 25px;
+    }
+a:hover,a:focus{
+    outline: none;
+    text-decoration: none;
+    color: #eec111;
+}
+.tab{
+    margin-top: 25px;
+    background: #200122;
+    background: -webkit-linear-gradient(to bottom, #6f0000, #200122);
+    background: linear-gradient(to bottom, #6f0000, #200122);
+    padding: 40px 50px;
+    position: relative;
+    border-radius: 10px;
+}
+.tab:before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(#4527a0,#2f0b45);
+    opacity: 0.85;
+    border-radius: 10px;
+}
+.tab .nav-tabs{
+    border-bottom: none;
+    padding: 0 20px;
+    position: relative;
+}
+.tab .nav-tabs li{ margin: 0 30px 0 0; }
+.tab .nav-tabs li a{
+    font-size: 18px;
+    color: #fff;
+    border-radius: 0;
+    text-transform: uppercase;
+    background: transparent;
+    padding: 0;
+    margin-right: 0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    opacity: 0.5;
+    position: relative;
+    transition: all 0.5s ease 0s;
+}
+.tab .nav-tabs li a:hover{ background: transparent; }
+.tab .nav-tabs li.active a,
+.tab .nav-tabs li.active a:focus,
+.tab .nav-tabs li.active a:hover{
+    border: none;
+    background: transparent;
+    opacity: 1;
+    border-bottom: 2px solid #eec111;
+    color: #fff;
+}
+.tab .tab-content{
+    padding: 20px 0 0 0;
+    margin-top: 40px;
+    background: transparent;
+    z-index: 1;
+    position: relative;
+}
+.form-bg{ background: #ddd; }
+.form-horizontal .form-group{
+    margin: 0 0 15px 0;
+    position: relative;
+}
+.form-horizontal .form-control{
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 20px;
+    box-shadow: none;
+    padding: 0 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ebebeb;
+    transition: all 0.3s ease 0s;
+}
+.form-horizontal .form-control:focus{
+ box-shadow: none;
+ outline: 0 none;
+}
+.form-horizontal .form-group label{
+    padding: 0 20px;
+    color: #ebebeb;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+}
+.form-horizontal .main-checkbox{
+    width: 20px;
+    height: 20px;
+    background: #eec111;
+    float: left;
+    margin: 5px 0 0 20px;
+    border: 1px solid #eec111;
+    position: relative;
+}
+.form-horizontal .main-checkbox label{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+.form-horizontal .main-checkbox label:after{
+    content: "";
+    width: 10px;
+    height: 5px;
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    border: 3px solid #ebebeb;
+    border-top: none;
+    border-right: none;
+    background: transparent;
+    opacity: 0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.form-horizontal .main-checkbox input[type=checkbox]{ visibility: hidden; }
+.form-horizontal .main-checkbox input[type=checkbox]:checked + label:after{ opacity: 1; }
+.form-horizontal .text{
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    margin-left: 7px;
+    line-height: 20px;
+    padding-top: 5px;
+    text-transform: capitalize;
+}
+.form-horizontal .btn{
+    width: 100%;
+    background: #eec111;
+    padding: 10px 20px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin: 20px 0 30px 0;
+}
+.form-horizontal .btn:focus{
+    background: #eec111;
+    color: #fff;
+    outline: none;
+    box-shadow: none;
+}
+#chat-list {
+    float: left;
+    width: 20%;
+    float: left;
+}
+#chat-list > button, a {
+    width: 100%;
+}
+#current-chat {
+    width: 80%;
+    float: right;
+    background: #ebebeb;
+    height: 90vh;
+    overflow-y: scroll;
+    text-align: center;
+    color: black;
+    top: 10px;
+}
+.current-message {
+    width: 100%;
+    background: #ebebeb;
+    display: flex;
+    align-items: flex-end;
+    max-height: 90%;
+    float: right;
+    margin-top: 10px;
+    padding: 3px 18px;
+    background: #ebebeb;
+}
+.send-button{
+    background: #2f0b45;
+    border-radius: 5px;
+    border: none;
+    margin-left: 3px;
+    padding: 3px 28px;
+    text-decoration: none;
+    color: #ebebeb;
+}
+.input-mess{
+    width: 100%;
+    color: black;
+}
+.message{
+    color: black;
+    float: left;
+    clear: both;
+    overflow: hidden;
+    min-width: 200px;
+    max-width: 760px;
+    height:100%;
+    background: #fff7ff;
+    display: flex;
+    padding: 3px 18px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: auto;
+    border-radius: 10px;
+    border:2px #2f0b45  solid;
+}
+.unread {
+    background: #d9edf7;
+}
+.self {
+    float: right;
+    margin-right: 18px;
+}
+.card {
+    margin: auto;
+    margin-top: 15px;
+    text-align: center;
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(#4527a0,#2f0b45);
+    border-radius: 30px;
+    color: #ebebeb;
+}
+
+.title_profile {
+    color: #ebebeb;
+    font-size: 20px;
+}
+.a2 {
+    text-decoration: none;
+    font-size: 23px;
+    color: #ebebeb;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    max-height: 110px;
+}
+.logo{
+    margin-top: 30px;
+    border-radius: 100px;
+    border: 3px solid #ebebeb;
+    text-align: center;
+}
+.delete-edit{
+    top: 0px;
+    max-width: 50px;
+    margin-left: 3px;
+    float: right;
+    margin-bottom: 10px;
+    background: #2f0b45;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+}
+.active {
+    border-color: black;
+}

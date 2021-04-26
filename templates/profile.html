@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/data_refresh.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/chat_interaction.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <title>Vitamo</title>
+</head>
+<body>
+<header>
+  <div class="title"><label>Vitamo</label></div>
+  <a class='a1' href="/">Chats</a>
+</header>
+<div class="card">
+  {% if not current_user.logo %}
+  {% set source = url_for('static', filename='img/logo.png') %}
+  {% else %}
+  {% set source = url_for('static', filename='img/%s') % current_user.logo %}
+  {% endif %}
+  <img src="{{ source }}" alt="Руслан лох" class='logo'>
+  <h1>{{ current_user.username }}</h1>
+  <h4 class="title_profile"> <small style="color: #ebebeb">Email:</small>  {{ current_user.email }} </h4>
+  <h4 class="title_profile"> <small  style="color: #ebebeb">Description:</small>  {{ current_user.description }} </h4>
+  <a class='a2' href="/auth">Logout</a>
+</div>
+</body>
+</html>
