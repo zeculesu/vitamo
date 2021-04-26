@@ -2,82 +2,82 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-offset-3 col-md-6">
-      <div class="tab" role="tabpanel">
-        <ul class="nav nav-tabs" role="tablist">
-          {% if not register_message %}
-          <li role="presentation" class="active"><a href="#login" aria-controls="home" role="tab"
-                                                    data-toggle="tab">sign in</a></li>
-          <li role="presentation"><a href="#register" aria-controls="profile" role="tab"
-                                     data-toggle="tab">sign up</a></li>
-          {% else %}
-          <li role="presentation"><a href="#login" aria-controls="home" role="tab"
-                                     data-toggle="tab">sign in</a></li>
-          <li role="presentation" class="active"><a href="#register" aria-controls="profile" role="tab"
-                                                    data-toggle="tab">sign up</a></li>
-          {% endif %}
-        </ul>
-        <div class="tab-content tabs">
-          {% if not register_message %}
-          <div role="tabpanel" class="tab-pane fade in active" id="login">
-            {% else %}
-            <div role="tabpanel" class="tab-pane fade" id="login">
-              {% endif %}
-              <form method="post" class="form-horizontal">
-                {{ login_form.hidden_tag() }}
-                {% if login_message %}
-                <div class="alert alert-danger">{{ login_message }}</div>
-                {% endif %}
-                <div class="form-group">
-                  {{ login_form.username.label }}
-                  {{ login_form.username(class="form-control") }}
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <div class="tab" role="tabpanel">
+                <ul class="nav nav-tabs" role="tablist">
+                    {% if not register_message %}
+                    <li role="presentation" class="active"><a href="#login" aria-controls="home" role="tab"
+                                                              data-toggle="tab">sign in</a></li>
+                    <li role="presentation"><a href="#register" aria-controls="profile" role="tab"
+                                               data-toggle="tab">sign up</a></li>
+                    {% else %}
+                    <li role="presentation"><a href="#login" aria-controls="home" role="tab"
+                                               data-toggle="tab">sign in</a></li>
+                    <li role="presentation" class="active"><a href="#register" aria-controls="profile" role="tab"
+                                                              data-toggle="tab">sign up</a></li>
+                    {% endif %}
+                </ul>
+                <div class="tab-content tabs">
+                    {% if not register_message %}
+                    <div role="tabpanel" class="tab-pane fade in active" id="login">
+                        {% else %}
+                        <div role="tabpanel" class="tab-pane fade" id="login">
+                            {% endif %}
+                            <form method="post" class="form-horizontal">
+                                {{ login_form.hidden_tag() }}
+                                {% if login_message %}
+                                <div class="alert alert-danger">{{ login_message }}</div>
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ login_form.username.label }}
+                                    {{ login_form.username(class="form-control") }}
+                                </div>
+                                <div class="form-group">
+                                    {{ login_form.password.label }}
+                                    {{ login_form.password(class="form-control") }}
+                                </div>
+                                <div class="form-group">
+                                    {{ login_form.keep_signed(class="main-checkbox") }}
+                                    <span class="text">Keep me Signed in</span>
+                                </div>
+                                <div class="form-group">
+                                    {{ login_form.submit(class="btn btn-default", value="sign in") }}
+                                </div>
+                            </form>
+                        </div>
+                        {% if not register_message %}
+                        <div role="tabpanel" class="tab-pane fade" id="register">
+                            {% else %}
+                            <div role="tabpanel" class="tab-pane fade in active" id="register">
+                                {% endif %}
+                                <form method="post" class="form-horizontal">
+                                    {% if register_message %}
+                                    <div class="alert alert-danger">{{ register_message }}</div>
+                                    {% endif %}
+                                    {{ register_form.hidden_tag() }}
+                                    <div class="form-group">
+                                        {{ register_form.username.label }}
+                                        {{ register_form.username(class="form-control") }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ register_form.email.label }}
+                                        {{ register_form.email(class="form-control", type="email") }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ register_form.password.label }}
+                                        {{ register_form.password(class="form-control") }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ register_form.submit(class="btn btn-default", value="sign up") }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                  {{ login_form.password.label }}
-                  {{ login_form.password(class="form-control") }}
-                </div>
-                <div class="form-group">
-                  {{ login_form.keep_signed(class="main-checkbox") }}
-                  <span class="text">Keep me Signed in</span>
-                </div>
-                <div class="form-group">
-                  {{ login_form.submit(class="btn btn-default", value="sign in") }}
-                </div>
-              </form>
             </div>
-            {% if not register_message %}
-            <div role="tabpanel" class="tab-pane fade" id="register">
-              {% else %}
-              <div role="tabpanel" class="tab-pane fade in active" id="register">
-                {% endif %}
-                <form method="post" class="form-horizontal">
-                  {% if register_message %}
-                  <div class="alert alert-danger">{{ register_message }}</div>
-                  {% endif %}
-                  {{ register_form.hidden_tag() }}
-                  <div class="form-group">
-                    {{ register_form.username.label }}
-                    {{ register_form.username(class="form-control") }}
-                  </div>
-                  <div class="form-group">
-                    {{ register_form.email.label }}
-                    {{ register_form.email(class="form-control", type="email") }}
-                  </div>
-                  <div class="form-group">
-                    {{ register_form.password.label }}
-                    {{ register_form.password(class="form-control") }}
-                  </div>
-                  <div class="form-group">
-                    {{ register_form.submit(class="btn btn-default", value="sign up") }}
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

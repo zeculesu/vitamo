@@ -51,6 +51,8 @@ class ChatResource(Resource):
         method_parser = MethodParser()
         method = method_parser.parse_args()['method']
         if method is not None:
+            if method == 'deleteForSelf':
+                return self.kickUser(chat_id, current_user.id)
             try:
                 parser = eval(f'Chat{method[0].upper() + method[1:]}Parser()')
             except NameError:
@@ -72,11 +74,6 @@ class ChatResource(Resource):
             args['users'] = [handle_user_id(user_id, session) for user_id in args['users'].split(',')]
         for key, val in filter(lambda x: x[1] is not None, args.items()):
             setattr(chat, key, val)
-        if not chat.title:
-            users_names = [user.username for user in chat.users]
-            if len(users_names) > 3:
-                users_names = users_names[:3]
-            chat.title = ', '.join(users_names)
         session.merge(chat)
         session.commit()
         return jsonify({'message': 'OK'})
@@ -112,11 +109,6 @@ class ChatListResource(Resource):
                                           if user != str(current_user.id)]
         chat = Chat(**args)
         chat.users = [handle_user_id(user_id, session) for user_id in users]
-        if not chat.title:
-            users_names = [user.username for user in chat.users]
-            if len(users_names) > 3:
-                users_names = users_names[:3]
-            chat.title = ', '.join(users_names)
         session.add(chat)
         session.commit()
         return jsonify({'message': 'OK'})

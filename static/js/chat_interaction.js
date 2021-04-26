@@ -30,7 +30,11 @@ function openChat(chat_id = null, with_input = true) {
         cookies = setCookie('opened', chat_id);
     }
     else {
-        if (document.getElementById(`chat-${cookies['opened']}`)) { 
+        var chat = document.getElementById(`chat-${cookies['opened']}`); 
+        if (chat) { 
+            if (chat.className.endsWith('active')) {
+                chat.className = chat.className.replace('active', '');
+            }
             if (!chat_id) {
                 cookies = setCookie('opened', cookies['opened']);
             }
@@ -61,7 +65,25 @@ function openChat(chat_id = null, with_input = true) {
                 document.getElementsByClassName('input-mess')[0].focus();
             }
         });
-    }
+    };
+    document.getElementById(`chat-${cookies['opened']}`).className += ' active';
+};
+
+function deleteChat (chat_id) {
+    cookies = parseCookies();
+    var token = cookies['token'];
+    if (!token) {
+        alert('There is no API token in cookies');
+    };
+    $.ajax({
+        type: 'POST',
+        url: `/api/chats/${chat_id}`,
+        data: `token=${token}&method=deleteForSelf`,
+        success: function () {
+            alert(`Chat ${chat_id} has been successfully deleted`);
+            window.location.reload();
+        }
+    });
 };
 
 function sendMessage (chat_id) {

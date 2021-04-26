@@ -47,7 +47,7 @@ class MessageResource(Resource):
             args['attachments'] = [handle_attachment_id(attach_id) for attach_id
                                    in args['attachments'].split(',')]
         for key, val in filter(lambda x: x[1] is not None, args.items()):
-            if message.text != args['text'] and not message.is_edited:
+            if args['text'] is not None and message.text != args['text'] and not message.is_edited:
                 message.is_edited = True
             setattr(message, key, val)
         session.merge(message)

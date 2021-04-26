@@ -21,10 +21,22 @@
         {% for chat in chats %}
         <button id="chat-{{ chat['id'] }}" class="alert alert-info mb-0" style="width: 100%;margin-bottom: 3px;"
                 onclick="openChat({{ chat['id'] }})">
-            {{ chat.title }}
+            {% if not chat['title'] %}
+            {% set users = [] %}
+            {% for user in chat.users %}
+            {% set appended = users.append(user.username) %}
+            {% endfor %}
+            {% set title = users|join(", ") %}
+            {% if len(title) > 25 %}
+            {% set title = title[:22] + "..." %}
+            {% endif %}
+            {{ title }}
+            {% else %}
+            {{ chat['title'] }}
+            {% endif %}
         </button>
         {% if chat['users'][0].id == current_user.id %}
-        <a class="delete-edit" href="/delete_chat/{{ chat['id'] }}">Delete</a>
+        <a class="delete-edit" href="javascript:deleteChat({{ chat['id'] }})">Delete</a>
         <a class="delete-edit" href="/edit_chat/{{ chat['id'] }}">Edit</a>
         {% endif %}
         {% endfor %}

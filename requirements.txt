@@ -3,14 +3,10 @@ aniso8601==9.0.1
 APScheduler==3.6.3
 async-timeout==3.0.1
 attrs==20.3.0
-beautifulsoup4==4.9.3
-bs4==0.0.1
 certifi==2020.12.5
 chardet==3.0.4
 click==7.1.2
 DAWG-Python==0.7.2
-discord==1.0.1
-discord.py==1.7.1
 docopt==0.6.2
 Flask==1.1.2
 Flask-JWT-Extended==4.1.0
@@ -35,10 +31,6 @@ MarkupSafe==1.1.1
 marshmallow==3.11.1
 multidict==5.1.0
 PyJWT==2.0.1
-pymorphy2==0.9.1
-pymorphy2-dicts-ru==2.4.417127.4579844
-python-dotenv==0.17.0
-python-telegram-bot==13.4.1
 pytz==2021.1
 requests==2.25.1
 rfc3986==1.4.0

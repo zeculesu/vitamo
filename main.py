@@ -1,10 +1,7 @@
-import io
 import json
 import os.path
-import time
 
-from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, session, Response, make_response
+from flask import Flask, render_template, redirect, session, Response, make_response, url_for
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -18,14 +15,13 @@ from data.api.utils import get_current_user
 from data.forms.chats import ChatForm
 from data.forms.users import LoginForm, RegisterForm
 from data.models.users import User
-from utils import assert_sorted_data, generate_random_name, process_chat_form_data
+from utils import assert_sorted_data, process_chat_form_data
 from work_api import *
 
-load_dotenv()
 app = Flask(__name__, template_folder='./templates')
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = 'super_secret_key'
 app.config['JSON_AS_ASCII'] = False
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = 'super_secret_key'
 app.config['JWT_IDENTITY_CLAIM'] = 'user'
 app.config['JWT_HEADER_NAME'] = 'authorization'
 app.jwt = JWTManager(app)
@@ -54,7 +50,7 @@ def index():
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
         return render_template('error.html', error=error)
-    response = make_response(render_template('main_window.html', chats=chats))
+    response = make_response(render_template('index.html', chats=chats, len=len))
     response.set_cookie('token', session.get('_token'), max_age=10 ** 10)
     return response
 
@@ -95,9 +91,7 @@ def edit_chat(chat_id):
     form = ChatForm()
     if form.is_submitted():
         title, members, logo = process_chat_form_data(form, request)
-        print('dlsalda: {}'.format([str(current_user.id)] + members.split(',')))
         members = ','.join([str(current_user.id)] + members.split(','))
-        print(f'members: {members}')
         message = edit_chat_api(chat_id, title, members, logo, session.get('_token'))
         if isinstance(message, str):
             return render_template('error.html', error=message), 400
@@ -135,7 +129,6 @@ def listen():
                 rest_chats = chats[:]
                 yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
             yield 'event: online\n\n'
-            time.sleep(2.5)
 
     return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
@@ -189,6 +182,5 @@ def profile():
 
 if __name__ == '__main__':
     db_session.global_init(os.path.join('db', 'vitamo_data.db'))
-    app.run()
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

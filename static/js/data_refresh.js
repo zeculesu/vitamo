@@ -17,7 +17,20 @@ eventSource.addEventListener("new-message", function(event) {
         elem = document.createElement('button');
         elem.id = `chat-${chat['id']}`;
         elem.className = 'alert alert-info';
-        elem.innerText = chat['title'];
+        if (!chat['title']) {
+            var users = [];
+            for (let user of chat['users']) {
+                users.append(user['username']);
+            }
+            var title = users.join(', ');
+            if (title.length > 25) {
+                title = title.substring(0, 22) + '...';
+            };
+            elem.innerText = title;
+        }
+        else {
+            elem.innerText = chat['title'];
+        }
         elem.style = 'width: 100%;';
         elem.setAttribute('onclick', `openChat(${chat['id']})`);
         chat_list.insertAdjacentElement('beforeend', elem);

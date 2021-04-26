@@ -5,7 +5,6 @@ from sqlalchemy_serializer import SerializerMixin
 
 from ..db_session import SQLAlchemyBase
 
-
 user_to_message = Table('user_to_message', SQLAlchemyBase.metadata,
                         Column('user', Integer, ForeignKey('users.id')),
                         Column('message', Integer, ForeignKey('messages.id')))

@@ -313,3 +313,6 @@ a:hover,a:focus{
     text-align: center;
     font-size: 15px;
 }
+.active {
+    border-color: black;
+}
