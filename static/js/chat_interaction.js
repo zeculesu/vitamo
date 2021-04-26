@@ -195,6 +195,7 @@ function startEditMessage (chat_id, message_id) {
     var input_field = document.getElementsByClassName('input-mess')[0];
     input_field.value = message.getElementsByClassName('content')[0].getElementsByTagName('p')[0].innerText;
     send_btn.setAttribute('onclick', `editMessage(${chat_id}, ${message_id})`);    
+    scrollSmoothToBottom('current-chat');
 };
 
 function editMessage (chat_id, message_id) {
