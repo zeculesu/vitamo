@@ -20,7 +20,7 @@ eventSource.addEventListener("new-message", function(event) {
         if (!chat['title']) {
             var users = [];
             for (let user of chat['users']) {
-                users.append(user['username']);
+                users.push(user['username']);
             }
             var title = users.join(', ');
             if (title.length > 25) {
