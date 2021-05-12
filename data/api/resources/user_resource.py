@@ -29,9 +29,13 @@ class UserResource(Resource):
         args = parser.parse_args()
         if args.get('password') is not None:
             user.set_password(args.pop('password'))
-        chars = 20
-        if len(args.get('username', 0)) > chars:
-            abort(400, message=f'Too long username. Its length must be under {chars} chars')
+        name_chars = 20
+        if args.get('username') is not None and len(args['username']) > name_chars:
+            abort(400, message=f'Too long username. Its length must be under {name_chars} chars')
+        description_chars = 40
+        if args.get('description') is not None and len(args['description']) > description_chars:
+            abort(400, message=f'Too long description. Its length must be under '
+                               f'{description_chars} chars')
         for key, val in filter(lambda x: x[1] is not None, args.items()):
             setattr(user, key, val)
         session.merge(user)

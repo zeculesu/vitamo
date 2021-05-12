@@ -22,11 +22,13 @@
   {% else %}
   {% set source = url_for('static', filename='img/%s') % current_user.logo %}
   {% endif %}
-  <img src="{{ source }}" alt="Руслан лох" class='logo'>
+  <img src="{{ source.replace(' ', '') }}" alt="Картинка" class='logo'>
   <h1>{{ current_user.username }}</h1>
   <h4 class="title_profile"> <small style="color: #ebebeb">Email:</small>  {{ current_user.email }} </h4>
   <h4 class="title_profile"> <small  style="color: #ebebeb">Description:</small>  {{ current_user.description }} </h4>
-  <a class='a2' href="/auth">Logout</a>
+  <a href="/profile/edit" class="btn btn-primary mt-5" style="width: 50%; margin-top: 5px">Edit profile</a>
+  <a href="/profile/change_password" class="btn btn-success" style="width: 50%; margin-top: 5px;">Change password</a>
+  <a class='a2' href="/auth" style="margin-top: 10px;">Logout</a>
 </div>
 </body>
 </html>

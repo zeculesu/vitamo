@@ -33,14 +33,19 @@ def generate_random_name(existing_names, length=15):
     return output
 
 
+def save_file(file):
+    mimetype = file.mimetype.split('/')[-1]
+    img_folder = url_for('static', filename='img').lstrip('/')
+    existing_names = [x.split('.')[0] for x in os.listdir(img_folder)]
+    filename = f'{generate_random_name(existing_names)}.{mimetype}'
+    file.save(os.path.join(img_folder, filename))
+    return filename
+
+
 def process_chat_form_data(form, request):
     title = form.title.data
     members = ','.join(form.users.data)
     logo = request.files.get('logo')
     if logo:
-        mimetype = logo.mimetype.split('/')[-1]
-        img_folder = url_for('static', filename='img').lstrip('/')
-        existing_names = [x.split('.')[0] for x in os.listdir(img_folder)]
-        filename = generate_random_name(existing_names)
-        logo.save(os.path.join(img_folder, f'{filename}.{mimetype}'))
+        logo = save_file(logo)
     return title, members, logo

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<a class="a1" href="/profile">Profile</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <form action="" method="post" enctype="multipart/form-data" style="padding: 20px;">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label(style="color: #ebebeb;") }}
+            {{ form.username(class="form-control", placeholder="Enter username") }}
+        </p>
+        <p>
+            {{ form.email.label(style="color: #ebebeb;") }}
+            {{ form.email(class="form-control", placeholder="Enter email") }}
+        </p>
+        <p>
+            {{ form.description.label(style="color: #ebebeb;") }}
+            {{ form.description(class="form-control", placeholder="Enter description") }}
+        </p>
+        <p>
+            {{ form.logo.label(style="color: #ebebeb;") }}
+            {{ form.logo(class="form-control") }}
+        </p>
+        <p>
+            {{ form.submit(class="btn btn-success", style="background: #eec111; border:2px #eec111 solid;") }}
+        </p>
+    </form>
+</div>
+{% endblock %}

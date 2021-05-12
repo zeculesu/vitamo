@@ -5,7 +5,7 @@
 <div class="alert alert-danger" role="alert">
     {{ error }}
 </div>
-<form action="/auth">
+<form action="{{ href|default('/auth') }}">
     <button style="background: #2f0b45;
                    border-radius: 5px;
                    border: none;

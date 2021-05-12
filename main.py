@@ -1,8 +1,8 @@
 import json
-import os.path
+import os
 import time
 
-from flask import Flask, render_template, redirect, session, Response, make_response, url_for
+from flask import Flask, render_template, redirect, session, Response, make_response
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager, login_user, logout_user, current_user, AnonymousUserMixin
 from flask_restful import Api
@@ -14,9 +14,9 @@ from data.api.resources.token_resource import TokenResource
 from data.api.resources.user_resource import UserResource, UserPublicListResource
 from data.api.utils import get_current_user
 from data.forms.chats import ChatForm
-from data.forms.users import LoginForm, RegisterForm
+from data.forms.users import LoginForm, RegisterForm, ProfileEditForm, PasswordForm
 from data.models.users import User
-from utils import assert_sorted_data, process_chat_form_data
+from utils import assert_sorted_data, process_chat_form_data, save_file
 from work_api import *
 
 app = Flask(__name__, template_folder='./templates')
@@ -50,7 +50,7 @@ def index():
         return redirect('/auth')
     chats, error = get_chats(session.get('_token'))  # Список чатов
     if error:
-        return render_template('error.html', error=error)
+        return render_template('error.html', error=error, href='/auth')
     response = make_response(render_template('index.html', chats=chats, len=len))
     response.set_cookie('token', session.get('_token'), max_age=10 ** 10)
     return response
@@ -62,7 +62,7 @@ def show_chat(chat_id):
         return redirect('/auth')
     chat, error = get_chat(chat_id, session.get('_token'))
     if error:
-        return render_template('error.html', error=error)
+        return render_template('error.html', error=error, href='/auth')
     return render_template('chat.html', chat=chat)
 
 
@@ -75,11 +75,11 @@ def add_chat():
         title, members, logo = process_chat_form_data(form, request)
         message = add_chat_api(title, members, logo, session.get('_token'))
         if isinstance(message, str):
-            return render_template('error.html', error=message)
+            return render_template('error.html', error=message, href='/'), 400
         return redirect('/')
     users, message = get_users(session.get('_token'))
     if message:
-        return render_template('error.html', error=message), 400
+        return render_template('error.html', error=message, href='/'), 400
     form.users.choices = [(user.get("id"), user.get("username")) for user in users
                           if user.get('id') != current_user.id]
     return render_template('chat_form.html', form=form, submit_text='Add')
@@ -95,14 +95,14 @@ def edit_chat(chat_id):
         members = ','.join([str(current_user.id)] + members.split(','))
         message = edit_chat_api(chat_id, title, members, logo, session.get('_token'))
         if isinstance(message, str):
-            return render_template('error.html', error=message), 400
+            return render_template('error.html', error=message, href='/'), 400
         return redirect('/')
     chat, message = get_chat(chat_id, session.get('_token'))
     if message:
-        return render_template('error.html', error=message), 400
+        return render_template('error.html', error=message, href='/'), 400
     users, message = get_users(session.get('_token'))
     if message:
-        return render_template('error.html', error=message), 400
+        return render_template('error.html', error=message, href='/'), 400
     form.title.data = chat.get('title')
     form.users.choices = [(user.get("id"), user.get("username")) for user in users
                           if user.get('id') != current_user.id]
@@ -111,6 +111,51 @@ def edit_chat(chat_id):
     if chat.get('logo'):
         form.logo.file.filename = chat['logo']
     return render_template('chat_form.html', form=form, submit_text='Edit')
+
+
+@app.route('/profile/edit', methods=['GET', 'POST'])
+def edit_user():
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
+    form = ProfileEditForm()
+    if form.is_submitted():
+        username, email, description = (form.username.data, form.email.data,
+                                        form.description.data)
+        logo = save_file(request.files['logo']) if request.files.get('logo') else None
+        message = edit_user_api(current_user.id, session.get('_token'), username=username,
+                                email=email, description=description, logo=logo)
+        if isinstance(message, str):
+            return render_template('error.html', error=message, href='/profile'), 400
+        return redirect('/profile')
+    form.logo.filename = current_user.logo
+    form.username.data = current_user.username
+    form.email.data = current_user.email
+    form.description.data = current_user.description
+    return render_template('edit_profile.html', form=form)
+
+
+@app.route('/profile/change_password', methods=['GET', 'POST'])
+def change_password():
+    if not current_user.is_authenticated or isinstance(current_user, AnonymousUserMixin):
+        return redirect('/auth')
+    form = PasswordForm()
+    if form.is_submitted():
+        if not current_user.check_password(form.current_password.data):
+            return render_template('change_password.html',
+                                   form=PasswordForm(),
+                                   message='Current password is wrong'), 400
+        if form.new_password.data != form.new_password_again.data:
+            return render_template('change_password.html',
+                                   form=PasswordForm(),
+                                   message='Passwords does not match'), 400
+        message = edit_user_api(current_user.id, session.get('_token'),
+                                password=form.new_password.data)
+        if isinstance(message, str):
+            return render_template('change_password.html', form=PasswordForm(),
+                                   message=message), 400
+        return render_template('change_password.html', form=PasswordForm(),
+                               message='Password has been changed successfully')
+    return render_template('change_password.html', form=form)
 
 
 @app.route('/listen')
@@ -131,6 +176,7 @@ def listen():
                 yield f'data: {json.dumps(chats)}\nevent: new-message\n\n'
             yield 'event: online\n\n'
             time.sleep(2.5)
+
     return Response(respond_to_client(token, host_url), mimetype='text/event-stream')
 
 

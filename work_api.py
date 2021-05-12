@@ -85,3 +85,17 @@ def delete_chat_api(chat_id, token):
     if response.get('message') != 'OK':
         return response['message']
     return True
+
+
+def edit_user_api(user_id, token, username=None, password=None, email=None,
+                  description=None, logo=None):
+    basic_url = f'{request.host_url}api/users/{user_id}'
+    response = get_response_json(requests.put(basic_url, data={'username': username,
+                                                               'password': password,
+                                                               'email': email,
+                                                               'description': description,
+                                                               'logo': logo,
+                                                               'token': token}))
+    if response.get('message') != 'OK':
+        return response['message']
+    return True
