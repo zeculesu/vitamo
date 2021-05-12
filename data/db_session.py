@@ -11,10 +11,10 @@ def global_init(db_file):
     global __factory
     if __factory:
         return None
-    if not db_file or not db_file.strip():
+    db_file = db_file.strip()
+    if not db_file:
         raise Exception('Необходимо указать файл данных')
-    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
-    engine = create_engine(conn_str, echo=False)
+    engine = create_engine(db_file.replace('postgres', 'postgresql'), echo=False)
     __factory = sessionmaker(bind=engine)
 
     from . import __all_models
