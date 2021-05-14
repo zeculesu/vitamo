@@ -234,5 +234,5 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port)
 
     # При локальном запуске:
-    # db_session.global_init(os.path.join('db', 'vitamo_data.db'))
+    # db_session.global_init(f"sqlite:///{os.path.join('db', 'vitamo_data.db')}?check_same_thread=False")
     # app.run()
