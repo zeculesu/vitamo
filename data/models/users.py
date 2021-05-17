@@ -31,7 +31,7 @@ class User(SQLAlchemyBase, SerializerMixin, UserMixin):
     hashed_password = Column(String)
     username = Column(String)
     description = Column(String, nullable=True)
-    logo = Column(Integer, ForeignKey('attachments.id'), nullable=True)
+    logo = Column(String, ForeignKey('attachments.id'), nullable=True)
     # contacts = relation('User', secondary='user_to_user', backref='users')
     chats = relation('Chat', secondary='chat_to_user', backref='users')
     created_date = Column(DateTime, default=datetime.now)
