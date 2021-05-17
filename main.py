@@ -228,5 +228,11 @@ def profile():
 
 
 if __name__ == '__main__':
+    # При запуске на хероку:
     db_session.global_init(f"sqlite:///{os.path.join('db', 'vitamo_data.db')}?check_same_thread=False")
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
+    # При локальном запуске:
+    # 
+    # app.run()
